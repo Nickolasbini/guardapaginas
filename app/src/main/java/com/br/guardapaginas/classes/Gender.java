@@ -8,24 +8,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Gender extends ModelBase{
-    private String id;
-    private String name;
-    private String createdAt;
-    private String institution;
+public class Gender{
+
+    public int id;
+    public String name;
+    public String createdAt;
+    public int institution;
 
     public String attributes[] = {"id","name","date","institution"};
 
     public Gender(){
-        setTableName("gender");
-        setAttributesFromModel(attributes);
-        setCurrentObject(this);
+        //setTableName("gender");
+        //setAttributesFromModel(attributes);
+        //setCurrentObject(this);
     }
 
-    public String getId() {
+    public int getId() {
         return id;
     }
-    public void setId(String id) {
+    public void setId(int id) {
         this.id = id;
     }
 
@@ -43,14 +44,15 @@ public class Gender extends ModelBase{
         this.createdAt = createdAt;
     }
 
-    public String getInstitution() {
+    public int getInstitution() {
         return institution;
     }
-    public void setInstitution(String institution) {
+    public void setInstitution(int institution) {
         this.institution = institution;
     }
 
     public Boolean saveGender(Gender obj){
+        /*
         HashMap<String, String> dataToSave =new HashMap<String, String>();
         dataToSave.put("id",        obj.getId());
         dataToSave.put("name",      obj.getName());
@@ -59,7 +61,9 @@ public class Gender extends ModelBase{
             String value=(String)dataToSave.get(key);
             System.out.println("Key: " +key+ "  |  Value: " + value);
         }
-
-        return save(dataToSave);
+        System.out.println(dataToSave);
+         */
+        return true;
+        //return save(dataToSave);
     }
 }

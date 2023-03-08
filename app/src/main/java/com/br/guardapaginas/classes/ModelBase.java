@@ -30,6 +30,7 @@ public class ModelBase {
                 String val = (String)arrayData.get(key);
                 key = (key.equals(null) ? "" : key.toString());
                 jsonObject.put("${key}", val);
+                System.out.println(key.toString());
             }
             value = jsonObject.toString();
         } catch (JSONException e) {
@@ -37,6 +38,7 @@ public class ModelBase {
             e.printStackTrace();
             value = "";
         }
+        System.out.println("Result to save");
         System.out.println(value);
         return true;
     }
