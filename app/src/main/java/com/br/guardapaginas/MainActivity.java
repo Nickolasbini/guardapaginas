@@ -1,8 +1,11 @@
 package com.br.guardapaginas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Database;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -10,6 +13,8 @@ import android.widget.Button;
 
 import com.br.guardapaginas.classes.Gender;
 import com.br.guardapaginas.helpers.Functions;
+
+import java.util.Date;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -26,6 +31,33 @@ public class MainActivity extends AppCompatActivity {
         genderObj.setCreatedAt("2022-0307");
         genderObj.saveGender(genderObj);
 
+        try {
+
+            SQLiteDatabase db = openOrCreateDatabase("DB_GUARDAPAGINAS", MODE_PRIVATE, null);
+            // Create Table
+            db.execSQL("CREATE TABLE IF NOT EXISTS gender(id INTEGER PRIMARY KEY, name varchar(300), createdAt varchar(50))");
+            db.execSQL("INSERT INTO gender(name, createdAt) VALUES ('drama', '2022-03-08')");
+
+            String query   = "SELECT * FROM gender";
+            Cursor results = db.rawQuery(query, null);
+            // Index of values
+            int indexName = results.getColumnIndex("name");
+            int indexDate = results.getColumnIndex("date");
+            results.moveToFirst();
+            String[] data = null;
+            int position = 0;
+            while(!results.equals(null)){
+                String name = results.getString(indexName);
+                String date = results.getString(indexDate);
+                data[position] = name + date;
+                position++;
+                results.moveToNext();
+            }
+            System.out.println(data);
+
+        } catch (Exception exception) {
+
+        }
         Button btn = (Button) findViewById(R.id.btnEntrar);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {

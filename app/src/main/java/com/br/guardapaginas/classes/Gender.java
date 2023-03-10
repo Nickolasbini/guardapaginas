@@ -2,17 +2,26 @@ package com.br.guardapaginas.classes;
 
 import android.widget.Toast;
 
+import androidx.room.ColumnInfo;
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.br.guardapaginas.helpers.Functions;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-
+@Entity(tableName = "gender")
 public class Gender{
-
+    @PrimaryKey
     public int id;
+
+    @ColumnInfo(name = "name")
     public String name;
+
+    @ColumnInfo(name = "created at")
     public String createdAt;
+
     public int institution;
 
     public String attributes[] = {"id","name","date","institution"};
