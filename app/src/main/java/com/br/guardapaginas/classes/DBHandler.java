@@ -1,24 +1,21 @@
 package com.br.guardapaginas.classes;
 
 import android.database.sqlite.SQLiteDatabase;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Database;
-import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 
-public class Connection {
+import com.br.guardapaginas.MainActivity;
 
-    SQLiteDatabase connetion;
+public class DBHandler {
+
+    SQLiteDatabase dbConnetion;
 
     /**
      * Creates DB connection and DB TABLES if necessary
      */
-    public Connection()
+    public DBHandler(MainActivity context)
     {
         try{
-            SQLiteDatabase db = openatabOrCreateDatabase("DB_GUARDAPAGINAS", MODE_PRIVATE, null);
-            setConnetion(db);
+            SQLiteDatabase db = context.openOrCreateDatabase("DB_GUARDAPAGINAS", context.MODE_PRIVATE, null);
+            setDBConnetion(db);
             // Create Table
             db.execSQL("CREATE TABLE IF NOT EXISTS genders(id INTEGER PRIMARY KEY, name varchar(300), createdAt varchar(50))");
             db.execSQL("CREATE TABLE IF NOT EXISTS books(id INTEGER PRIMARY KEY, title varchar(100), synopsis varchar(300), author varchar(60), releaseDate varchar(50), editorName varchar(60), gender INTEGER, FOREIGN KEY (gender) REFERENCES genders (id))");
@@ -34,17 +31,17 @@ public class Connection {
      * Sets a value to the connection object
      * @param SQLiteDatabase obj
      */
-    public void setConnetion(SQLiteDatabase obj)
+    public void setDBConnetion(SQLiteDatabase obj)
     {
-        this.connetion = obj;
+        this.dbConnetion = obj;
     }
 
     /**
      * Return the value of the current data base connection
      * @return SQLiteDatabase connection
      */
-    public SQLiteDatabase getConnection()
+    public SQLiteDatabase getDBConnection()
     {
-        return this.connetion;
+        return this.dbConnetion;
     }
 }

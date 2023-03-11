@@ -1,7 +1,6 @@
 package com.br.guardapaginas;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Database;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -11,11 +10,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.br.guardapaginas.classes.Connection;
-import com.br.guardapaginas.classes.Gender;
-import com.br.guardapaginas.helpers.Functions;
-
-import java.util.Date;
+import com.br.guardapaginas.classes.DBHandler;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,7 +27,8 @@ public class MainActivity extends AppCompatActivity {
         genderObj.setCreatedAt("2022-0307");
         genderObj.saveGender(genderObj);*/
 
-        Connection connectionObj = new Connection();
+        DBHandler connectionObj = new DBHandler(MainActivity.this);
+        /*
         SQLiteDatabase db = connectionObj.getConnection();
 
         String query   = "SELECT * FROM gender";
@@ -43,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         results.moveToFirst();
         String[] data = null;
         int position = 0;
-        while(!results.equals(null)){
+        while(results.equals(null)){
             String name = results.getString(indexName);
             String date = results.getString(indexDate);
             data[position] = name + date;
@@ -51,6 +47,7 @@ public class MainActivity extends AppCompatActivity {
             results.moveToNext();
         }
         System.out.println(data);
+        */
 
         Button btn = (Button) findViewById(R.id.btnEntrar);
         btn.setOnClickListener(new View.OnClickListener() {
