@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.br.guardapaginas.classes.DBHandler;
+import com.br.guardapaginas.classes.Gender;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,7 +28,9 @@ public class MainActivity extends AppCompatActivity {
         genderObj.setCreatedAt("2022-0307");
         genderObj.saveGender(genderObj);*/
 
-        DBHandler connectionObj = new DBHandler(MainActivity.this);
+        //DBHandler connectionObj = new DBHandler(MainActivity.this);
+        Gender genderObj = new Gender(this);
+        System.out.println(genderObj.getDBConnection());
         /*
         SQLiteDatabase db = connectionObj.getConnection();
 

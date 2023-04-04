@@ -1,87 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scaleType="fitCenter"
-    android:background="@android:color/transparent"
-    tools:context=".HomePage">
+    android:layout_height="wrap_content"
+    android:background="@android:color/background_light"
+    android:layout_margin="5dp"
+    android:orientation="horizontal" >
 
-    <com.google.android.material.bottomappbar.BottomAppBar
-        android:id="@+id/bottomAppBar"
-        android:layout_width="804dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+    <View
+        android:id="@+id/view1"
+        android:layout_width="7dp"
+        android:layout_height="match_parent"
+        android:background="@android:color/background_dark" />
 
-    <com.google.android.material.tabs.TabLayout
-        android:layout_width="409dp"
-        android:layout_height="wrap_content"
-        app:layout_constraintBottom_toBottomOf="@+id/bottomAppBar"
-        app:layout_constraintStart_toStartOf="parent">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Livros" />
-
-        <com.google.android.material.tabs.TabItem
-            android:id="@+id/categoriesTab"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Categorias" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Emprestimos" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <Button
-        android:id="@+id/btnSendEmail"
+    <TextView
+        android:id="@+id/textView1"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Enviar email"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/inputEMail" />
+        android:layout_height="match_parent"
+        android:text="TextView" />
 
-    <EditText
-        android:id="@+id/inputEMail"
-        android:layout_width="322dp"
-        android:layout_height="44dp"
-        android:layout_marginTop="32dp"
-        android:ems="10"
-        android:inputType="textEmailAddress"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="80dp"
+        android:layout_height="90dp"
+        android:layout_gravity="right"
+        android:scaleType="centerCrop"
+        android:src="" />
 
-    <Button
-        android:id="@+id/openDial"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="Abrir"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btnSendEmail" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="295dp"
-        android:layout_height="202dp"
-        android:layout_marginTop="32dp"
-        android:background="@android:color/transparent"
-        android:scaleType="fitCenter"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/openDial"
-        app:srcCompat="@drawable/logofacear" />
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</LinearLayout>

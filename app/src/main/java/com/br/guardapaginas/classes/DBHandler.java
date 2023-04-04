@@ -1,5 +1,6 @@
 package com.br.guardapaginas.classes;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.br.guardapaginas.MainActivity;
@@ -11,7 +12,7 @@ public class DBHandler {
     /**
      * Creates DB connection and DB TABLES if necessary
      */
-    public DBHandler(MainActivity context)
+    public DBHandler(Context context)
     {
         try{
             SQLiteDatabase db = context.openOrCreateDatabase("DB_GUARDAPAGINAS", context.MODE_PRIVATE, null);

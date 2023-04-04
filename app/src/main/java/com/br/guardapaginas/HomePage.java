@@ -22,7 +22,7 @@ public class HomePage extends AppCompatActivity {
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
+/*
         Button btn = (Button) findViewById(R.id.btnSendEmail);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -31,7 +31,7 @@ public class HomePage extends AppCompatActivity {
                 System.out.println("Resultado do email");
                 System.out.println(result);
             }
-        });
+        });*/
     }
 
     private Boolean sendEmail(String email, String subject, String message){

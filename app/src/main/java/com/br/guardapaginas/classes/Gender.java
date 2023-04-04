@@ -1,5 +1,6 @@
 package com.br.guardapaginas.classes;
 
+import android.content.Context;
 import android.widget.Toast;
 
 import androidx.room.ColumnInfo;
@@ -12,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 @Entity(tableName = "gender")
-public class Gender{
+public class Gender extends DBHandler{
     @PrimaryKey
     public int id;
 
@@ -26,7 +27,8 @@ public class Gender{
 
     public String attributes[] = {"id","name","date","institution"};
 
-    public Gender(){
+    public Gender(Context context){
+        super(context);
         //setTableName("gender");
         //setAttributesFromModel(attributes);
         //setCurrentObject(this);
