@@ -1,0 +1,509 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Aps>
+	<Group>
+		<Page Width="12" Height="12" PaperTray="0">
+			<Canvas>
+				<Canvas>
+					<Clip>
+						<Path FillMode="Winding">
+							<PathFigure IsClosed="True">
+								<PolyLine LineColor="#FF000000">
+									<Point X="0" Y="0" />
+									<Point X="0" Y="12" />
+								</PolyLine>
+								<PolyLine LineColor="#FF000000">
+									<Point X="0" Y="12" />
+									<Point X="12" Y="12" />
+								</PolyLine>
+								<PolyLine LineColor="#FF000000">
+									<Point X="12" Y="12" />
+									<Point X="12" Y="0" />
+								</PolyLine>
+								<PolyLine LineColor="#FF000000">
+									<Point X="12" Y="0" />
+									<Point X="0" Y="0" />
+								</PolyLine>
+							</PathFigure>
+						</Path>
+					</Clip>
+					<Path FillMode="Winding" RenderTransform="1 0 0 -1 0 12">
+						<Brush>
+							<SolidBrush Color="#FF000000" />
+						</Brush>
+						<Pen Alignment="Center" DashCap="Flat" DashOffset="0" DashStyle="Solid" EndCap="Flat" LineJoin="Miter" MiterLimit="10" StartCap="Flat" Width="1">
+							<Brush>
+								<SolidBrush Color="#FFFFFFFF" />
+							</Brush>
+						</Pen>
+						<PathFigure IsClosed="True">
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="1.125" Y="10.5" />
+								<ControlPoint1 X="0.50367963" Y="10.5" />
+								<ControlPoint2 X="0" Y="9.996321" />
+								<EndPoint X="0" Y="9.375" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0" Y="9.375" />
+								<Point X="0" Y="9.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0" Y="9.375" />
+								<Point X="0" Y="2.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0" Y="2.625" />
+								<Point X="0" Y="2.625" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="0" Y="2.625" />
+								<ControlPoint1 X="0" Y="2.0036793" />
+								<ControlPoint2 X="0.50367963" Y="1.5" />
+								<EndPoint X="1.125" Y="1.5" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="1.125" Y="1.5" />
+								<Point X="1.125" Y="1.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="1.125" Y="1.5" />
+								<Point X="10.875" Y="1.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="10.875" Y="1.5" />
+								<Point X="10.875" Y="1.5" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="10.875" Y="1.5" />
+								<ControlPoint1 X="11.496321" Y="1.5" />
+								<ControlPoint2 X="12" Y="2.0036793" />
+								<EndPoint X="12" Y="2.625" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="12" Y="2.625" />
+								<Point X="12" Y="2.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="12" Y="2.625" />
+								<Point X="12" Y="9.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="12" Y="9.375" />
+								<Point X="12" Y="9.375" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="12" Y="9.375" />
+								<ControlPoint1 X="12" Y="9.996321" />
+								<ControlPoint2 X="11.496321" Y="10.5" />
+								<EndPoint X="10.875" Y="10.5" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="10.875" Y="10.5" />
+								<Point X="10.875" Y="10.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="10.875" Y="10.5" />
+								<Point X="1.125" Y="10.5" />
+							</PolyLine>
+						</PathFigure>
+						<PathFigure IsClosed="True">
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="10.875" Y="9.75" />
+								<ControlPoint1 X="11.082107" Y="9.75" />
+								<ControlPoint2 X="11.25" Y="9.582107" />
+								<EndPoint X="11.25" Y="9.375" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="11.25" Y="9.375" />
+								<Point X="11.25" Y="9.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="11.25" Y="9.375" />
+								<Point X="11.25" Y="2.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="11.25" Y="2.625" />
+								<Point X="11.25" Y="2.625" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="11.25" Y="2.625" />
+								<ControlPoint1 X="11.25" Y="2.4178934" />
+								<ControlPoint2 X="11.082107" Y="2.25" />
+								<EndPoint X="10.875" Y="2.25" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="10.875" Y="2.25" />
+								<Point X="10.875" Y="2.25" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="10.875" Y="2.25" />
+								<Point X="1.125" Y="2.25" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="1.125" Y="2.25" />
+								<Point X="1.125" Y="2.25" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="1.125" Y="2.25" />
+								<ControlPoint1 X="0.9178932" Y="2.25" />
+								<ControlPoint2 X="0.75" Y="2.4178934" />
+								<EndPoint X="0.75" Y="2.625" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0.75" Y="2.625" />
+								<Point X="0.75" Y="2.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0.75" Y="2.625" />
+								<Point X="0.75" Y="9.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="0.75" Y="9.375" />
+								<Point X="0.75" Y="9.375" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="0.75" Y="9.375" />
+								<ControlPoint1 X="0.75" Y="9.582107" />
+								<ControlPoint2 X="0.9178932" Y="9.75" />
+								<EndPoint X="1.125" Y="9.75" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="1.125" Y="9.75" />
+								<Point X="1.125" Y="9.75" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="1.125" Y="9.75" />
+								<Point X="10.875" Y="9.75" />
+							</PolyLine>
+						</PathFigure>
+					</Path>
+					<Path FillMode="Winding" RenderTransform="1 0 0 -1 0 12">
+						<Brush>
+							<SolidBrush Color="#FF000000" />
+						</Brush>
+						<Pen Alignment="Center" DashCap="Flat" DashOffset="0" DashStyle="Solid" EndCap="Flat" LineJoin="Miter" MiterLimit="10" StartCap="Flat" Width="1">
+							<Brush>
+								<SolidBrush Color="#FFFFFFFF" />
+							</Brush>
+						</Pen>
+						<PathFigure IsClosed="False">
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3.75" Y="6" />
+								<ControlPoint1 X="3.75" Y="6.2071066" />
+								<ControlPoint2 X="3.9178932" Y="6.375" />
+								<EndPoint X="4.125" Y="6.375" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="6.375" />
+								<Point X="4.125" Y="6.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="6.375" />
+								<Point X="9.375" Y="6.375" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="6.375" />
+								<Point X="9.375" Y="6.375" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.375" Y="6.375" />
+								<ControlPoint1 X="9.582107" Y="6.375" />
+								<ControlPoint2 X="9.75" Y="6.2071066" />
+								<EndPoint X="9.75" Y="6" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.75" Y="6" />
+								<Point X="9.75" Y="6" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.75" Y="6" />
+								<ControlPoint1 X="9.75" Y="5.7928934" />
+								<ControlPoint2 X="9.582107" Y="5.625" />
+								<EndPoint X="9.375" Y="5.625" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="5.625" />
+								<Point X="9.375" Y="5.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="5.625" />
+								<Point X="4.125" Y="5.625" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="5.625" />
+								<Point X="4.125" Y="5.625" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="4.125" Y="5.625" />
+								<ControlPoint1 X="3.9178932" Y="5.625" />
+								<ControlPoint2 X="3.75" Y="5.7928934" />
+								<EndPoint X="3.75" Y="6" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="3.75" Y="6" />
+								<Point X="3.75" Y="7.875" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3.75" Y="7.875" />
+								<ControlPoint1 X="3.75" Y="8.082107" />
+								<ControlPoint2 X="3.9178932" Y="8.25" />
+								<EndPoint X="4.125" Y="8.25" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="8.25" />
+								<Point X="4.125" Y="8.25" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="8.25" />
+								<Point X="9.375" Y="8.25" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="8.25" />
+								<Point X="9.375" Y="8.25" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.375" Y="8.25" />
+								<ControlPoint1 X="9.582107" Y="8.25" />
+								<ControlPoint2 X="9.75" Y="8.082107" />
+								<EndPoint X="9.75" Y="7.875" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.75" Y="7.875" />
+								<Point X="9.75" Y="7.875" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.75" Y="7.875" />
+								<ControlPoint1 X="9.75" Y="7.6678934" />
+								<ControlPoint2 X="9.582107" Y="7.5" />
+								<EndPoint X="9.375" Y="7.5" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="7.5" />
+								<Point X="9.375" Y="7.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="7.5" />
+								<Point X="4.125" Y="7.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="7.5" />
+								<Point X="4.125" Y="7.5" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="4.125" Y="7.5" />
+								<ControlPoint1 X="3.9178932" Y="7.5" />
+								<ControlPoint2 X="3.75" Y="7.6678934" />
+								<EndPoint X="3.75" Y="7.875" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="3.75" Y="7.875" />
+								<Point X="3.75" Y="4.125" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3.75" Y="4.125" />
+								<ControlPoint1 X="3.75" Y="4.3321066" />
+								<ControlPoint2 X="3.9178932" Y="4.5" />
+								<EndPoint X="4.125" Y="4.5" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="4.5" />
+								<Point X="4.125" Y="4.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="4.5" />
+								<Point X="9.375" Y="4.5" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="4.5" />
+								<Point X="9.375" Y="4.5" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.375" Y="4.5" />
+								<ControlPoint1 X="9.582107" Y="4.5" />
+								<ControlPoint2 X="9.75" Y="4.3321066" />
+								<EndPoint X="9.75" Y="4.125" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.75" Y="4.125" />
+								<Point X="9.75" Y="4.125" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="9.75" Y="4.125" />
+								<ControlPoint1 X="9.75" Y="3.9178934" />
+								<ControlPoint2 X="9.582107" Y="3.75" />
+								<EndPoint X="9.375" Y="3.75" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="3.75" />
+								<Point X="9.375" Y="3.75" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="9.375" Y="3.75" />
+								<Point X="4.125" Y="3.75" />
+							</PolyLine>
+							<PolyLine LineColor="#FF000000">
+								<Point X="4.125" Y="3.75" />
+								<Point X="4.125" Y="3.75" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="4.125" Y="3.75" />
+								<ControlPoint1 X="3.9178932" Y="3.75" />
+								<ControlPoint2 X="3.75" Y="3.9178934" />
+								<EndPoint X="3.75" Y="4.125" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="3.75" Y="4.125" />
+								<Point X="3" Y="7.875" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3" Y="7.875" />
+								<ControlPoint1 X="3" Y="7.7410254" />
+								<ControlPoint2 X="2.9285254" Y="7.6172276" />
+								<EndPoint X="2.8125" Y="7.5502405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.8125" Y="7.5502405" />
+								<Point X="2.8125" Y="7.5502405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.8125" Y="7.5502405" />
+								<ControlPoint1 X="2.6964746" Y="7.483253" />
+								<ControlPoint2 X="2.5535254" Y="7.483253" />
+								<EndPoint X="2.4375" Y="7.5502405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.4375" Y="7.5502405" />
+								<Point X="2.4375" Y="7.5502405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.4375" Y="7.5502405" />
+								<ControlPoint1 X="2.3214746" Y="7.6172276" />
+								<ControlPoint2 X="2.25" Y="7.7410254" />
+								<EndPoint X="2.25" Y="7.875" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.25" Y="7.875" />
+								<Point X="2.25" Y="7.875" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.25" Y="7.875" />
+								<ControlPoint1 X="2.25" Y="8.082107" />
+								<ControlPoint2 X="2.4178932" Y="8.25" />
+								<EndPoint X="2.625" Y="8.25" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.625" Y="8.25" />
+								<Point X="2.625" Y="8.25" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.625" Y="8.25" />
+								<ControlPoint1 X="2.8321068" Y="8.25" />
+								<ControlPoint2 X="3" Y="8.082107" />
+								<EndPoint X="3" Y="7.875" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="3" Y="7.875" />
+								<Point X="3" Y="6" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3" Y="6" />
+								<ControlPoint1 X="3" Y="5.8660254" />
+								<ControlPoint2 X="2.9285254" Y="5.7422276" />
+								<EndPoint X="2.8125" Y="5.6752405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.8125" Y="5.6752405" />
+								<Point X="2.8125" Y="5.6752405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.8125" Y="5.6752405" />
+								<ControlPoint1 X="2.6964746" Y="5.608253" />
+								<ControlPoint2 X="2.5535254" Y="5.608253" />
+								<EndPoint X="2.4375" Y="5.6752405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.4375" Y="5.6752405" />
+								<Point X="2.4375" Y="5.6752405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.4375" Y="5.6752405" />
+								<ControlPoint1 X="2.3214746" Y="5.7422276" />
+								<ControlPoint2 X="2.25" Y="5.8660254" />
+								<EndPoint X="2.25" Y="6" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.25" Y="6" />
+								<Point X="2.25" Y="6" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.25" Y="6" />
+								<ControlPoint1 X="2.25" Y="6.2071066" />
+								<ControlPoint2 X="2.4178932" Y="6.375" />
+								<EndPoint X="2.625" Y="6.375" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.625" Y="6.375" />
+								<Point X="2.625" Y="6.375" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.625" Y="6.375" />
+								<ControlPoint1 X="2.8321068" Y="6.375" />
+								<ControlPoint2 X="3" Y="6.2071066" />
+								<EndPoint X="3" Y="6" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="3" Y="6" />
+								<Point X="3" Y="4.125" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="3" Y="4.125" />
+								<ControlPoint1 X="3" Y="3.991025" />
+								<ControlPoint2 X="2.9285254" Y="3.8672276" />
+								<EndPoint X="2.8125" Y="3.8002405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.8125" Y="3.8002405" />
+								<Point X="2.8125" Y="3.8002405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.8125" Y="3.8002405" />
+								<ControlPoint1 X="2.6964746" Y="3.7332535" />
+								<ControlPoint2 X="2.5535254" Y="3.7332535" />
+								<EndPoint X="2.4375" Y="3.8002405" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.4375" Y="3.8002405" />
+								<Point X="2.4375" Y="3.8002405" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.4375" Y="3.8002405" />
+								<ControlPoint1 X="2.3214746" Y="3.8672276" />
+								<ControlPoint2 X="2.25" Y="3.991025" />
+								<EndPoint X="2.25" Y="4.125" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.25" Y="4.125" />
+								<Point X="2.25" Y="4.125" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.25" Y="4.125" />
+								<ControlPoint1 X="2.25" Y="4.3321066" />
+								<ControlPoint2 X="2.4178932" Y="4.5" />
+								<EndPoint X="2.625" Y="4.5" />
+							</Bezier>
+							<PolyLine LineColor="#FF000000">
+								<Point X="2.625" Y="4.5" />
+								<Point X="2.625" Y="4.5" />
+							</PolyLine>
+							<Bezier CurveColor="#FF000000">
+								<StartPoint X="2.625" Y="4.5" />
+								<ControlPoint1 X="2.8321068" Y="4.5" />
+								<ControlPoint2 X="3" Y="4.3321066" />
+								<EndPoint X="3" Y="4.125" />
+							</Bezier>
+						</PathFigure>
+					</Path>
+				</Canvas>
+			</Canvas>
+		</Page>
+	</Group>
+</Aps>

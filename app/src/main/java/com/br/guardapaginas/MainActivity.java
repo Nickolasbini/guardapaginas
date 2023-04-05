@@ -13,6 +13,8 @@ import android.widget.Button;
 import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.Gender;
 
+import com.br.guardapaginas.AulaClass;
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "nickolas";
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
 
         //DBHandler connectionObj = new DBHandler(MainActivity.this);
         Gender genderObj = new Gender(this);
+        System.out.println("Oi");
         System.out.println(genderObj.getDBConnection());
         /*
         SQLiteDatabase db = connectionObj.getConnection();
@@ -52,10 +55,14 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(data);
         */
 
+        Intent intent = new Intent(this, HomePage.class);
+        startActivity(intent);
+
         Button btn = (Button) findViewById(R.id.btnEntrar);
         btn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                goToHomePage();
+                //goToHomePage();
+
 
 
                 // whatsAPP();
