@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:id="@+id/page_1"
-        android:enabled="true"
-        android:icon="@drawable/guardalivros_logo"
-        android:title="op1"/>
-    <item
-        android:id="@+id/page_2"
-        android:enabled="true"
-        android:icon="@drawable/guardalivros_logo"
-        android:title="op2"/>
+    <item android:title="Home"
+        android:icon="@drawable/home"
+        android:id="@+id/homeTab"
+        />
+    <item android:title="Books"
+        android:icon="@drawable/book"
+        android:id="@+id/bookTab"
+        />
+    <item android:title="Readers"
+        android:icon="@drawable/reader"
+        android:id="@+id/readerTab"
+        />
 </menu>

@@ -1,29 +1,31 @@
 package com.br.guardapaginas;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-
-import com.br.guardapaginas.classes.DBHandler;
-import com.br.guardapaginas.classes.Gender;
-
-import com.br.guardapaginas.AulaClass;
+import com.br.guardapaginas.databinding.ActivityMainBinding;
+import com.br.guardapaginas.fragments.BookFragment;
+import com.br.guardapaginas.fragments.HomeFragment;
+import com.br.guardapaginas.fragments.ReaderFragment;
 
 public class MainActivity extends AppCompatActivity {
 
     public static final String EXTRA_MESSAGE = "nickolas";
     Button btn;
+    ActivityMainBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         /*Gender genderObj = new Gender();
         genderObj.setName("romance");
@@ -31,9 +33,9 @@ public class MainActivity extends AppCompatActivity {
         genderObj.saveGender(genderObj);*/
 
         //DBHandler connectionObj = new DBHandler(MainActivity.this);
-        Gender genderObj = new Gender(this);
-        System.out.println("Oi");
-        System.out.println(genderObj.getDBConnection());
+        //Gender genderObj = new Gender(this);
+        //System.out.println("Oi");
+        //System.out.println(genderObj.getDBConnection());
         /*
         SQLiteDatabase db = connectionObj.getConnection();
 
@@ -55,21 +57,33 @@ public class MainActivity extends AppCompatActivity {
         System.out.println(data);
         */
 
-        Intent intent = new Intent(this, HomePage.class);
-        startActivity(intent);
+//        Intent intent = new Intent(this, HomePage.class);
+//        startActivity(intent);
 
-        Button btn = (Button) findViewById(R.id.btnEntrar);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                //goToHomePage();
+        replaceFragment(new HomeFragment());
+        binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
 
-
-
-                // whatsAPP();
-                // openPhoneContact();
-                // openWebSite("https://unifacear.com.br");
+            switch (item.getItemId()){
+                case R.id.homeTab:
+                    replaceFragment(new HomeFragment());
+                    break;
+                case R.id.bookTab:
+                    replaceFragment(new BookFragment());
+                    break;
+                case R.id.readerTab:
+                    replaceFragment(new ReaderFragment());
+                    break;
             }
+
+            return true;
         });
+    }
+
+    public void replaceFragment(Fragment fragment) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 
     private void goToHomePage(){
