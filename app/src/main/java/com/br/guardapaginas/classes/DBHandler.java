@@ -1,6 +1,7 @@
 package com.br.guardapaginas.classes;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.br.guardapaginas.MainActivity;
@@ -8,6 +9,8 @@ import com.br.guardapaginas.MainActivity;
 public class DBHandler {
 
     SQLiteDatabase dbConnetion;
+
+    Cursor results;
 
     /**
      * Creates DB connection and DB TABLES if necessary
@@ -28,9 +31,17 @@ public class DBHandler {
         }
     }
 
+    public void setResults(Cursor results){
+        this.results = results;
+    }
+
+    public Cursor getResults(){
+        return this.results;
+    }
+
     /**
      * Sets a value to the connection object
-     * @param SQLiteDatabase obj
+     * param SQLiteDatabase obj
      */
     public void setDBConnetion(SQLiteDatabase obj)
     {
@@ -44,5 +55,20 @@ public class DBHandler {
     public SQLiteDatabase getDBConnection()
     {
         return this.dbConnetion;
+    }
+
+    /**
+     * Execute sent query, returning True if it was executed
+     * param   queryToExecute
+     * @return Boolean
+     */
+    public Boolean execQuery(String queryToExecute){
+        try {
+            Cursor result = dbConnetion.rawQuery(queryToExecute, null);
+            setResults(result);
+            return true;
+        } catch (Exception e){
+            return false;
+        }
     }
 }

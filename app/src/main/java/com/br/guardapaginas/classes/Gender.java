@@ -1,6 +1,7 @@
 package com.br.guardapaginas.classes;
 
 import android.content.Context;
+import android.database.Cursor;
 import android.widget.Toast;
 
 import androidx.room.ColumnInfo;
@@ -63,6 +64,14 @@ public class Gender extends DBHandler{
     }
 
     public Boolean saveGender(Gender obj){
+        String query = "";
+        if(obj.getId() > 0){
+            query = "UPDATE gender SET NAME = "+obj.getName()+" WHERE id = "+obj.getId();
+        }else{
+            query = "INSERT into gender (name, date, institution) VALUES ("+obj.getName()+","+obj.getCreatedAt()+","+obj.getInstitution()+")";
+        }
+        Boolean result = execQuery(query);
+
         /*
         HashMap<String, String> dataToSave =new HashMap<String, String>();
         dataToSave.put("id",        obj.getId());
