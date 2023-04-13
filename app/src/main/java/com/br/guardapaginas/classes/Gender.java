@@ -13,7 +13,7 @@ import com.br.guardapaginas.helpers.Functions;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-@Entity(tableName = "gender")
+@Entity(tableName = "genders")
 public class Gender extends DBHandler{
     @PrimaryKey
     public int id;

@@ -10,6 +10,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.fragments.BookFragment;
 import com.br.guardapaginas.fragments.HomeFragment;
@@ -60,6 +62,17 @@ public class MainActivity extends AppCompatActivity {
 //        Intent intent = new Intent(this, HomePage.class);
 //        startActivity(intent);
 
+        //performLogin("nickolas@hotmail.com", "12345");
+    User obj = new User(getApplicationContext());
+    obj.setName("Nickolas Alvaro Bini");
+    obj.setEmail("nickolasbini@hotmail.com");
+    obj.setPassword("12345");
+    Boolean re = obj.saveUser(obj);
+    System.out.println(obj.getResults());
+        System.out.println(obj.getResults().getCount());
+        System.out.println(obj.getResults().getColumnCount());
+    System.out.println("Seraaa: "+re);
+
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
 
@@ -105,5 +118,15 @@ public class MainActivity extends AppCompatActivity {
     private void openWebSite(String url){
         Intent view = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
         startActivity(view);
+    }
+
+    public Boolean performLogin(String email, String pass){
+        User userObj = new User(getApplicationContext());
+
+        String v = userObj.hashMake("12345");
+        System.out.println("Nickolas");
+        System.out.println(userObj.hashCheck(v, "12345"));
+
+        return true;
     }
 }
