@@ -15,6 +15,9 @@ import java.util.Date;
 import java.util.HashMap;
 @Entity(tableName = "genders")
 public class Gender extends DBHandler{
+    public final Integer INACTIVE = 0;
+    public final Integer ACTIVE   = 1;
+
     @PrimaryKey
     public int id;
 
@@ -85,5 +88,27 @@ public class Gender extends DBHandler{
          */
         return true;
         //return save(dataToSave);
+    }
+
+    public ArrayList<Gender> fetchAll(Integer status){
+        ArrayList<Gender> emptyList = new ArrayList<Gender>(0);
+        if(status != this.ACTIVE && status != this.INACTIVE)
+            return emptyList;
+        //String query = "SELECT * FROM genders WHERE status = "+status.toString();
+        String query = "SELECT * FROM genders";
+        if(!execQuery(query))
+            return emptyList;
+        Cursor results = getResults();
+        results.moveToFirst();
+        Integer total = results.getCount();
+        ArrayList<Gender> data = new ArrayList<Gender>(total);
+        System.out.println(Functions.getNowDate());
+        for(Integer i = 0; i < total; i++){
+            Integer idIndex        = results.getColumnIndex("id");
+            Integer nameIndex      = results.getColumnIndex("name");
+            Integer createdAtIndex = results.getColumnIndex("createAt");
+            results.moveToNext();
+        }
+        return data;
     }
 }

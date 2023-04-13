@@ -1,5 +1,6 @@
 package com.br.guardapaginas.helpers;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -25,5 +26,10 @@ public class Functions {
         char c[] = val.trim().toLowerCase().toCharArray();
         c[0] = Character.toUpperCase(c[0]);
         return new String(c);
+    }
+
+    public static String getNowDate(){
+        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        return timeStamp;
     }
 }

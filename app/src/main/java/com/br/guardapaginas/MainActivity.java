@@ -29,50 +29,6 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        /*Gender genderObj = new Gender();
-        genderObj.setName("romance");
-        genderObj.setCreatedAt("2022-0307");
-        genderObj.saveGender(genderObj);*/
-
-        //DBHandler connectionObj = new DBHandler(MainActivity.this);
-        //Gender genderObj = new Gender(this);
-        //System.out.println("Oi");
-        //System.out.println(genderObj.getDBConnection());
-        /*
-        SQLiteDatabase db = connectionObj.getConnection();
-
-        String query   = "SELECT * FROM gender";
-        Cursor results = db.rawQuery(query, null);
-        // Index of values
-        int indexName = results.getColumnIndex("name");
-        int indexDate = results.getColumnIndex("date");
-        results.moveToFirst();
-        String[] data = null;
-        int position = 0;
-        while(results.equals(null)){
-            String name = results.getString(indexName);
-            String date = results.getString(indexDate);
-            data[position] = name + date;
-            position++;
-            results.moveToNext();
-        }
-        System.out.println(data);
-        */
-
-//        Intent intent = new Intent(this, HomePage.class);
-//        startActivity(intent);
-
-        //performLogin("nickolas@hotmail.com", "12345");
-    User obj = new User(getApplicationContext());
-    obj.setName("Nickolas Alvaro Bini");
-    obj.setEmail("nickolasbini@hotmail.com");
-    obj.setPassword("12345");
-    Boolean re = obj.saveUser(obj);
-    System.out.println(obj.getResults());
-        System.out.println(obj.getResults().getCount());
-        System.out.println(obj.getResults().getColumnCount());
-    System.out.println("Seraaa: "+re);
-
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
 

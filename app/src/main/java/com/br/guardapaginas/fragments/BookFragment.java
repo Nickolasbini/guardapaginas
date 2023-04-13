@@ -9,6 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.br.guardapaginas.R;
+import com.br.guardapaginas.classes.Book;
+import com.br.guardapaginas.classes.controller.BookController;
+import com.br.guardapaginas.classes.controller.GenderController;
+
+import java.util.ArrayList;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -61,6 +66,17 @@ public class BookFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_book, container, false);
+        View view = inflater.inflate(R.layout.fragment_book, container, false);
+
+        GenderController g = new GenderController(getContext());
+        g.getAllGenders();
+
+        return view;
+    }
+
+    public Void getAllBooks(){
+        BookController bookController = new BookController(getContext());
+        ArrayList<Book> data = bookController.getBooks();
+        return null;
     }
 }
