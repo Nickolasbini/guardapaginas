@@ -20,8 +20,12 @@ public class DBHandler {
     public DBHandler(Context context)
     {
         currentContext = context;
+        openConnection();
+    }
+
+    public void openConnection(){
         try{
-            SQLiteDatabase db = context.openOrCreateDatabase("DB_GUARDAPAGINAS", context.MODE_PRIVATE, null);
+            SQLiteDatabase db = currentContext.openOrCreateDatabase("DB_GUARDAPAGINAS", currentContext.MODE_PRIVATE, null);
             setDBConnetion(db);
             // Create Table
             db.execSQL("CREATE TABLE IF NOT EXISTS genders(id INTEGER PRIMARY KEY AUTOINCREMENT, name varchar(300), createdAt varchar(50))");
@@ -32,6 +36,13 @@ public class DBHandler {
         } catch (Exception exception) {
             System.out.println("Error connecting to BD");
         }
+    }
+
+    public void closeConnection(){
+        if(dbConnetion == null)
+            return;
+        dbConnetion.close();
+        setDBConnetion(null);
     }
 
     public void setResults(Cursor results){
@@ -71,6 +82,7 @@ public class DBHandler {
             setResults(result);
             return true;
         } catch (Exception e){
+            System.out.println("Error at DBHandler line 85: "+e);
             return false;
         }
     }

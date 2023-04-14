@@ -6,16 +6,22 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.fragments.BookFragment;
 import com.br.guardapaginas.fragments.HomeFragment;
 import com.br.guardapaginas.fragments.ReaderFragment;
+import com.br.guardapaginas.helpers.Functions;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,6 +34,28 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        User u = new User(getApplicationContext());
+        ArrayList<User> p = u.fetchAll();
+        System.out.println("Total:  "+p);
+        Integer po = 0;
+        for(User i : p){
+            System.out.println("Id:  "+i.getId()+"  |   Nome: "+i.getName() + "   Email: "+i.getEmail()+"   Senha: "+i.getPassword());
+            if(po.equals(0)){
+                i.setEmail("nickolasbini@hotmail.com");
+                i.setPassword("12345");
+                System.out.println("MEEE");
+            }else{
+                System.out.println("DEEEE");
+                i.setEmail("email" + po.toString() + "@hotmail.com");
+                i.setPassword("1");
+            }
+            System.out.println("Nova senha: "+i.getPassword()+ "  Mail: "+i.getEmail());
+            System.out.println(i.saveUser(i));
+            po++;
+        }
+
+        performLogin("nickolasbini@hotmail.com", "12345");
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
@@ -77,12 +105,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Boolean performLogin(String email, String pass){
-        User userObj = new User(getApplicationContext());
-
-        String v = userObj.hashMake("12345");
-        System.out.println("Nickolas");
-        System.out.println(userObj.hashCheck(v, "12345"));
-
+        User userObj            = new User(getApplicationContext());
+        ArrayList<User> results = userObj.findBy("email", email, false);
+        if(results.size() < 1)
+            return false;
+        User object = results.get(0);
+        System.out.println(Functions.hashCheck(object.getPassword(), pass));
+        if(!Functions.hashCheck(object.getPassword(), pass))
+            return false;
+        System.out.println("will logg in");
         return true;
     }
 }

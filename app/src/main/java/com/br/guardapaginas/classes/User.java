@@ -2,13 +2,18 @@ package com.br.guardapaginas.classes;
 
 import android.content.Context;
 import android.database.Cursor;
+import java.util.Base64;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import com.br.guardapaginas.helpers.Functions;
+
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.Base64;
 
 @Entity(tableName = "users")
 public class User extends DBHandler{
@@ -36,8 +41,6 @@ public class User extends DBHandler{
 
     @ColumnInfo(name = "status")
     public String status;
-
-    String[] salt = {"e38183138#", "-q18283138189"};
 
     public User(Context context){
         super(context);
@@ -72,7 +75,7 @@ public class User extends DBHandler{
     }
 
     public void setPassword(String password) {
-        this.password = hashMake(password);
+        this.password = Functions.hashMake(password);
     }
 
     public Integer getInstitution() {
@@ -100,94 +103,110 @@ public class User extends DBHandler{
     }
 
     public String[] getFillable(){
-        String[] fillable = {"name", "cpf", "email", "password", "status", "institution"};
+        String[] fillable = {"id", "name", "cpf", "email", "password", "status", "institution"};
         return fillable;
-    }
-
-    public Boolean findByEmail(String email){
-
-        return true;
-    }
-    public String hashMake(String s) {
-        try {
-            // Create MD5 Hash
-            MessageDigest digest = java.security.MessageDigest.getInstance("MD5");
-            digest.update(s.getBytes());
-            byte messageDigest[] = digest.digest();
-            // Create Hex String
-            StringBuffer hexString = new StringBuffer();
-            for (int i=0; i<messageDigest.length; i++)
-                hexString.append(Integer.toHexString(0xFF & messageDigest[i]));
-            String generatedHash = hexString.toString();
-            System.out.println("Hashed Salt: "+generatedHash);
-            generatedHash = salt[0]+generatedHash+salt[1];
-            return generatedHash;
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
-        return "";
-    }
-
-    public Boolean hashCheck(String hashed, String nonHashed){
-        if(!hashed.equals(hashMake(nonHashed)))
-            return false;
-        return true;
     }
 
     public Boolean saveUser(User obj){
         String query = "";
         if(obj.getId() > 0){
-            query = "UPDATE user SET name = "+obj.getName()+", email = "+obj.getEmail()+", password = "+obj.getPassword()+", institution = "+obj.getInstitution()+" WHERE id = "+obj.getId();
+            query = "UPDATE users SET name = '"+obj.getName()+"', email = '"+obj.getEmail()+"', password = '"+obj.getPassword()+"', institution = "+obj.getInstitution()+", cpf = "+obj.getCpf()+" WHERE id = "+obj.getId();
         }else{
-            query = "INSERT into users (name, email, password, institution) VALUES ('"+obj.getName()+"','"+obj.getEmail()+"','"+obj.getPassword()+"',"+obj.getInstitution()+")";
+            query = "INSERT into users (name, email, password, institution, cpf) VALUES ('"+obj.getName()+"','"+obj.getEmail()+"','"+obj.getPassword()+"',"+obj.getInstitution()+","+obj.getCpf()+")";
         }
-        User val = getByObject(obj.getEmail());
-        System.out.println("Obj resultado: "+val.getId()+"  Name: " + val.getName());
+        System.out.println("Query:  "+query);
         return execQuery(query);
     }
 
-    public User getByObject(String email){
-        String query = "SELECT * FROM users where email = '"+email+"'";
+    public ArrayList<User> fetchAll(){
+        String query = "SELECT * FROM users";
+        Boolean response = execQuery(query);
+        ArrayList<User> emptyList = new ArrayList<User>(0);
+        if(!response)
+            return emptyList;
+        Cursor results = this.getResults();
+        Integer total  = results.getCount();
+        if(results.equals(null) && total > 0)
+            return emptyList;
+        ArrayList<User> usersArray = new ArrayList<User>(total);
+        results.moveToFirst();
+        for(Integer i = 0; i < total; i++){
+            User objFetched = buildUserByCursorResult(results);
+            usersArray.add(objFetched);
+            results.moveToNext();
+        }
+        return usersArray;
+    }
+
+    public User findById(Integer id){
+        String query = "SELECT * FROM users WHERE id = "+id;
         Boolean response = execQuery(query);
         if(!response)
             return null;
-        Cursor result = getResults();
-        if(result.getCount() < 1)
+        Cursor results = this.getResults();
+        Integer total  = results.getCount();
+        if(results.equals(null) && total > 0)
             return null;
-        result.moveToFirst();
+        results.moveToFirst();
+        User objFetched = buildUserByCursorResult(results);
+        return objFetched;
+    }
+
+    public ArrayList<User> findBy(String attributeName, String attributeValue, Boolean onlyFirst){
+        String query = "SELECT * FROM users WHERE "+attributeName+" = '"+attributeValue+"'";
+        Boolean response = execQuery(query);
+        ArrayList<User> emptyList = new ArrayList<User>(0);
+        if(!response)
+            return emptyList;
+        Cursor results = this.getResults();
+        Integer total  = results.getCount();
+        if(results.equals(null) && total > 0)
+            return emptyList;
+        results.moveToFirst();
+        ArrayList<User> objects = new ArrayList<User>(total);
+        for(Integer i = 0; i < total; i++) {
+            User objFetched = buildUserByCursorResult(results);
+            objects.add(objFetched);
+            results.moveToNext();
+            if(onlyFirst)
+                break;
+        }
+        return objects;
+    }
+
+    public User buildUserByCursorResult(Cursor data){
         User obj = new User(currentContext);
-        for(Integer i = 0; i < 1; i++){
-            for(String attribute : this.getFillable()){
-                Integer position = result.getColumnIndex(attribute);
-                if(position < 1)
-                    continue;
-                String value = result.getString(position);
-                switch(attribute){
-                    case "id":
-                        obj.setId(Integer.parseInt(value));
+        for(String attribute : this.getFillable()){
+            Integer position = data.getColumnIndex(attribute);
+            String value = data.getString(position);
+            switch(attribute){
+                case "id":
+                    obj.setId(Integer.parseInt(value));
                     break;
-                    case "name":
-                        obj.setName(value);
+                case "name":
+                    obj.setName(value);
                     break;
-                    case "email":
-                        obj.setEmail(value);
+                case "email":
+                    obj.setEmail(value);
                     break;
-                    case "password":
-                        obj.setPassword(value);
+                case "password":
+                    obj.setPassword(value);
                     break;
-                    case "cpf":
-                        obj.setCpf(value);
+                case "cpf":
+                    obj.setCpf(value);
                     break;
-                    case "status":
-                        obj.setStatus(value);
+                case "status":
+                    obj.setStatus(value);
                     break;
-                    case "institution":
+                case "institution":
+                    if(value == null){
+                        obj.setInstitution(null);
+                    }else{
                         obj.setInstitution(Integer.parseInt(value));
+                    }
                     break;
-                }
             }
         }
         return obj;
     }
-
 }

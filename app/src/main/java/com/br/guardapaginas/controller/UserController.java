@@ -1,4 +1,4 @@
-package com.br.guardapaginas.classes.controller;
+package com.br.guardapaginas.controller;
 
 import android.content.Context;
 
