@@ -25,6 +25,4 @@ public class AlunoModel {
     public void setIdade(String idade) {
         this.idade = idade;
     }
-
-
 }

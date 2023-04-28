@@ -107,71 +107,63 @@ public class User extends DBHandler{
         return fillable;
     }
 
-    public Boolean saveUser(User obj){
-        String query = "";
-        if(obj.getId() > 0){
-            query = "UPDATE users SET name = '"+obj.getName()+"', email = '"+obj.getEmail()+"', password = '"+obj.getPassword()+"', institution = "+obj.getInstitution()+", cpf = "+obj.getCpf()+" WHERE id = "+obj.getId();
-        }else{
-            query = "INSERT into users (name, email, password, institution, cpf) VALUES ('"+obj.getName()+"','"+obj.getEmail()+"','"+obj.getPassword()+"',"+obj.getInstitution()+","+obj.getCpf()+")";
-        }
-        System.out.println("Query:  "+query);
-        return execQuery(query);
-    }
-
     public ArrayList<User> fetchAll(){
-        String query = "SELECT * FROM users";
-        Boolean response = execQuery(query);
-        ArrayList<User> emptyList = new ArrayList<User>(0);
-        if(!response)
-            return emptyList;
-        Cursor results = this.getResults();
-        Integer total  = results.getCount();
-        if(results.equals(null) && total > 0)
-            return emptyList;
-        ArrayList<User> usersArray = new ArrayList<User>(total);
-        results.moveToFirst();
-        for(Integer i = 0; i < total; i++){
-            User objFetched = buildUserByCursorResult(results);
-            usersArray.add(objFetched);
-            results.moveToNext();
-        }
-        return usersArray;
+//        String query = "SELECT * FROM users";
+//        Boolean response = execQuery(query);
+//        ArrayList<User> emptyList = new ArrayList<User>(0);
+//        if(!response)
+//            return emptyList;
+//        Cursor results = this.getResults();
+//        Integer total  = results.getCount();
+//        if(results.equals(null) && total > 0)
+//            return emptyList;
+//        ArrayList<User> usersArray = new ArrayList<User>(total);
+//        results.moveToFirst();
+//        for(Integer i = 0; i < total; i++){
+//            User objFetched = buildUserByCursorResult(results);
+//            usersArray.add(objFetched);
+//            results.moveToNext();
+//        }
+//        return usersArray;
+        return null;
     }
 
     public User findById(Integer id){
-        String query = "SELECT * FROM users WHERE id = "+id;
-        Boolean response = execQuery(query);
-        if(!response)
-            return null;
-        Cursor results = this.getResults();
-        Integer total  = results.getCount();
-        if(results.equals(null) && total > 0)
-            return null;
-        results.moveToFirst();
-        User objFetched = buildUserByCursorResult(results);
-        return objFetched;
+//        String query = "SELECT * FROM users WHERE id = "+id;
+//        Boolean response = execQuery(query);
+//        if(!response)
+//            return null;
+//        Cursor results = this.getResults();
+//        Integer total  = results.getCount();
+//        if(results.equals(null) && total > 0)
+//            return null;
+//        results.moveToFirst();
+//        User objFetched = buildUserByCursorResult(results);
+//        return objFetched;
+        return null;
     }
 
     public ArrayList<User> findBy(String attributeName, String attributeValue, Boolean onlyFirst){
-        String query = "SELECT * FROM users WHERE "+attributeName+" = '"+attributeValue+"'";
-        Boolean response = execQuery(query);
-        ArrayList<User> emptyList = new ArrayList<User>(0);
-        if(!response)
-            return emptyList;
-        Cursor results = this.getResults();
-        Integer total  = results.getCount();
-        if(results.equals(null) && total > 0)
-            return emptyList;
-        results.moveToFirst();
-        ArrayList<User> objects = new ArrayList<User>(total);
-        for(Integer i = 0; i < total; i++) {
-            User objFetched = buildUserByCursorResult(results);
-            objects.add(objFetched);
-            results.moveToNext();
-            if(onlyFirst)
-                break;
-        }
-        return objects;
+//        String query = "SELECT * FROM users WHERE "+attributeName+" = '"+attributeValue+"'";
+//        Boolean response = getDBConnection.raw(query);
+//        ArrayList<User> emptyList = new ArrayList<User>(0);
+//        if(!response)
+//            return emptyList;
+//        Cursor results = this.getResults();
+//        Integer total  = results.getCount();
+//        if(results.equals(null) && total > 0)
+//            return emptyList;
+//        results.moveToFirst();
+//        ArrayList<User> objects = new ArrayList<User>(total);
+//        for(Integer i = 0; i < total; i++) {
+//            User objFetched = buildUserByCursorResult(results);
+//            objects.add(objFetched);
+//            results.moveToNext();
+//            if(onlyFirst)
+//                break;
+//        }
+//        return objects;
+        return null;
     }
 
     public User buildUserByCursorResult(Cursor data){

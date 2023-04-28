@@ -1,8 +1,9 @@
 package com.br.guardapaginas.classes;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.widget.Toast;
 
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
@@ -11,12 +12,12 @@ import androidx.room.PrimaryKey;
 import com.br.guardapaginas.helpers.Functions;
 
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.List;
+
 @Entity(tableName = "genders")
 public class Gender extends DBHandler{
-    public final Integer INACTIVE = 0;
-    public final Integer ACTIVE   = 1;
+    public final String INACTIVE = "0";
+    public final String ACTIVE   = "1";
 
     @PrimaryKey
     public int id;
@@ -29,13 +30,14 @@ public class Gender extends DBHandler{
 
     public int institution;
 
+    public String status;
+
     public String attributes[] = {"id","name","date","institution"};
 
     public Gender(Context context){
         super(context);
-        //setTableName("gender");
-        //setAttributesFromModel(attributes);
-        //setCurrentObject(this);
+        setTableName("genders");
+        setAttributesFromModel(attributes);
     }
 
     public int getId() {
@@ -66,49 +68,77 @@ public class Gender extends DBHandler{
         this.institution = institution;
     }
 
-    public Boolean saveGender(Gender obj){
-        String query = "";
-        if(obj.getId() > 0){
-            query = "UPDATE gender SET NAME = "+obj.getName()+" WHERE id = "+obj.getId();
-        }else{
-            query = "INSERT into gender (name, date, institution) VALUES ("+obj.getName()+","+obj.getCreatedAt()+","+obj.getInstitution()+")";
-        }
-        Boolean result = execQuery(query);
-
-        /*
-        HashMap<String, String> dataToSave =new HashMap<String, String>();
-        dataToSave.put("id",        obj.getId());
-        dataToSave.put("name",      obj.getName());
-        dataToSave.put("createdAt", obj.getCreatedAt());
-        for (Object key : dataToSave.keySet()) {
-            String value=(String)dataToSave.get(key);
-            System.out.println("Key: " +key+ "  |  Value: " + value);
-        }
-        System.out.println(dataToSave);
-         */
-        return true;
-        //return save(dataToSave);
+    public String getStatus() {
+        return status;
+    }
+    public void setStatus(String status) {
+        this.status = status;
     }
 
-    public ArrayList<Gender> fetchAll(Integer status){
-        ArrayList<Gender> emptyList = new ArrayList<Gender>(0);
-        if(status != this.ACTIVE && status != this.INACTIVE)
-            return emptyList;
-        //String query = "SELECT * FROM genders WHERE status = "+status.toString();
-        String query = "SELECT * FROM genders";
-        if(!execQuery(query))
-            return emptyList;
-        Cursor results = getResults();
-        results.moveToFirst();
-        Integer total = results.getCount();
-        ArrayList<Gender> data = new ArrayList<Gender>(total);
-        System.out.println(Functions.getNowDate());
-        for(Integer i = 0; i < total; i++){
-            Integer idIndex        = results.getColumnIndex("id");
-            Integer nameIndex      = results.getColumnIndex("name");
-            Integer createdAtIndex = results.getColumnIndex("createAt");
-            results.moveToNext();
+    public Boolean save(Gender gender){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", gender.getName());
+        Integer result = 0;
+        if(gender.getId() > 0) {
+            contentValues.put("createdAt", gender.getCreatedAt());
+            result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(gender.getId())});
+        }else{
+            contentValues.put("createdAt", Functions.now().toString());
+            contentValues.put("status", this.ACTIVE);
+            result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
-        return data;
+        return (result > 0 ? true : false);
+    }
+
+    @SuppressLint("Range")
+    public List<Gender> fetchAll(String status) {
+        ArrayList list = new ArrayList();
+        StringBuilder stringBuilderQuery = new StringBuilder();
+        if(status == null) {
+            stringBuilderQuery.append("SELECT * FROM " + getTableName());
+        }else{
+            getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
+        }
+        Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
+        cursor.moveToFirst();
+        Gender gender;
+        while(!cursor.isAfterLast()){
+            gender = new Gender(currentContext);
+            gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            gender.setName(cursor.getString(cursor.getColumnIndex("name")));
+            gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
+            gender.setName(cursor.getString(cursor.getColumnIndex("status")));
+            list.add(gender);
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    public Integer remove(Integer id){
+        return getDBConnection().delete(getTableName(), "id = ?", new String[]{Integer.toString(id)});
+    }
+
+    @SuppressLint("Range")
+    public Gender findById(Integer id){
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM aluno where id = " + id, null);
+        cursor.moveToFirst();
+        Gender gender = new Gender(currentContext);
+        gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
+        gender.setName(cursor.getString(cursor.getColumnIndex("name")));
+        gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
+        gender.setName(cursor.getString(cursor.getColumnIndex("status")));
+        return gender;
+    }
+
+    public String parseToString(List<Gender> listOfGenders){
+        if(listOfGenders.size() < 1)
+            return null;
+        String result = "";
+        for(Gender obj : listOfGenders){
+            result += "-----";
+            result += "Id: "+obj.getId()+" | Name: "+obj.getName()+" | CreatedAt: "+obj.getCreatedAt()+" | Status: "+obj.getStatus();
+            result += "-----\n";
+        }
+        return result;
     }
 }

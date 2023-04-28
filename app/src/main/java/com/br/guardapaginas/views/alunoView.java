@@ -1,6 +1,7 @@
 package com.br.guardapaginas.views;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
@@ -16,6 +17,7 @@ import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.classes.AlunoModel;
 import com.br.guardapaginas.classes.DAO.AlunoDAO;
+import com.br.guardapaginas.uteis.mensagem;
 
 import java.util.List;
 
@@ -43,12 +45,6 @@ public class alunoView extends AppCompatActivity {
         listOfaluno = (ListView) findViewById(R.id.alunoList);
         listar();
 
-        saveAluno.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onCLick(View v){
-                saveAluno();
-            }
-        });
     }
 
     public void saveAluno(){
@@ -56,7 +52,7 @@ public class alunoView extends AppCompatActivity {
             mensagem.Alert(this, "Nome é de preenchimento obrigatório");
             this.nameInput.requestFocus();
         }else if(ageInput.getText().toString().trim().equals("")){
-            mensagem.ALert(this, "Idade é de preenchimento obrigatório");
+            mensagem.Alert(this, "Idade é de preenchimento obrigatório");
             this.ageInput.requestFocus();
         }else{
             AlunoModel alunoModel = new AlunoModel();
@@ -85,12 +81,12 @@ public class alunoView extends AppCompatActivity {
     }
 
     private void listar(){
-        try{
-            AlunoDAO alunoDao = new AlunoDAO(this);
-            List<AlunoModel> alunoModel = alunoDao.list();
-            listOfaluno.setAdapter(new Adapter(this, alunoModel));
-        }catch (Exception e){
-
-        }
+//        try{
+//            AlunoDAO alunoDao = new AlunoDAO(this);
+//            List<AlunoModel> alunoModel = alunoDao.list();
+//            listOfaluno.setAdapter(new Adapter(this, alunoModel));
+//        }catch (Exception e){
+//
+//        }
     }
 }

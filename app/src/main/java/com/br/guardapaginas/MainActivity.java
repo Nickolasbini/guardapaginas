@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.br.guardapaginas.classes.DBHandler;
+import com.br.guardapaginas.classes.Gender;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.fragments.BookFragment;
@@ -22,6 +23,7 @@ import com.br.guardapaginas.fragments.ReaderFragment;
 import com.br.guardapaginas.helpers.Functions;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,27 +37,36 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        User u = new User(getApplicationContext());
-        ArrayList<User> p = u.fetchAll();
-        System.out.println("Total:  "+p);
-        Integer po = 0;
-        for(User i : p){
-            System.out.println("Id:  "+i.getId()+"  |   Nome: "+i.getName() + "   Email: "+i.getEmail()+"   Senha: "+i.getPassword());
-            if(po.equals(0)){
-                i.setEmail("nickolasbini@hotmail.com");
-                i.setPassword("12345");
-                System.out.println("MEEE");
-            }else{
-                System.out.println("DEEEE");
-                i.setEmail("email" + po.toString() + "@hotmail.com");
-                i.setPassword("1");
-            }
-            System.out.println("Nova senha: "+i.getPassword()+ "  Mail: "+i.getEmail());
-            System.out.println(i.saveUser(i));
-            po++;
-        }
+//        User u = new User(getApplicationContext());
+//        ArrayList<User> p = u.fetchAll();
+//        System.out.println("Total:  "+p);
+//        Integer po = 0;
+//        for(User i : p){
+//            System.out.println("Id:  "+i.getId()+"  |   Nome: "+i.getName() + "   Email: "+i.getEmail()+"   Senha: "+i.getPassword());
+//            if(po.equals(0)){
+//                i.setEmail("nickolasbini@hotmail.com");
+//                i.setPassword("12345");
+//                System.out.println("MEEE");
+//            }else{
+//                System.out.println("DEEEE");
+//                i.setEmail("email" + po.toString() + "@hotmail.com");
+//                i.setPassword("1");
+//            }
+//            System.out.println("Nova senha: "+i.getPassword()+ "  Mail: "+i.getEmail());
+//            System.out.println(i.saveUser(i));
+//            po++;
+//        }
+//
+//        performLogin("nickolasbini@hotmail.com", "12345");
 
-        performLogin("nickolasbini@hotmail.com", "12345");
+        Gender genderObj = new Gender(getApplicationContext());
+//        genderObj.recyclyBD();
+//        genderObj.setName("drama");
+//        Boolean result = genderObj.save(genderObj);
+//        System.out.println("Resultado:  "+result);
+        List<Gender> data = genderObj.fetchAll(null);
+        System.out.println("Dados:");
+        System.out.println(genderObj.parseToString(data));
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
