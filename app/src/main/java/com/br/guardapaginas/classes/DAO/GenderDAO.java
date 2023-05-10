@@ -12,13 +12,13 @@ import java.util.List;
 
 @Dao
 public interface GenderDAO {
-    @Query("SELECT * FROM gender")
+    @Query("SELECT * FROM genders")
     List<Gender> getAll();
 
-    @Query("SELECT * FROM gender WHERE id IN (:userIds)")
+    @Query("SELECT * FROM genders WHERE id IN (:userIds)")
     List<Gender> fetchByIds(int[] userIds);
 
-    @Query("SELECT * FROM gender WHERE id = :userId")
+    @Query("SELECT * FROM genders WHERE id = :userId")
     Gender getById(int userId);
 
     @Insert

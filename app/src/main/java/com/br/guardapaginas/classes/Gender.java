@@ -14,18 +14,14 @@ import com.br.guardapaginas.helpers.Functions;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(tableName = "genders")
 public class Gender extends DBHandler{
     public final String INACTIVE = "0";
     public final String ACTIVE   = "1";
 
-    @PrimaryKey
     public int id;
 
-    @ColumnInfo(name = "name")
     public String name;
 
-    @ColumnInfo(name = "created at")
     public String createdAt;
 
     public int institution;
@@ -83,7 +79,7 @@ public class Gender extends DBHandler{
             contentValues.put("createdAt", gender.getCreatedAt());
             result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(gender.getId())});
         }else{
-            contentValues.put("createdAt", Functions.now().toString());
+            contentValues.put("createdAt", Functions.getNowDate());
             contentValues.put("status", this.ACTIVE);
             result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
@@ -94,12 +90,13 @@ public class Gender extends DBHandler{
     public List<Gender> fetchAll(String status) {
         ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
+        Cursor cursor = null;
         if(status == null) {
             stringBuilderQuery.append("SELECT * FROM " + getTableName());
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
         }else{
-            getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
         }
-        Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
         cursor.moveToFirst();
         Gender gender;
         while(!cursor.isAfterLast()){
@@ -107,7 +104,7 @@ public class Gender extends DBHandler{
             gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
             gender.setName(cursor.getString(cursor.getColumnIndex("name")));
             gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
-            gender.setName(cursor.getString(cursor.getColumnIndex("status")));
+            gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
             list.add(gender);
             cursor.moveToNext();
         }

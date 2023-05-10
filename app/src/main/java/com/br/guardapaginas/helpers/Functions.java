@@ -33,7 +33,7 @@ public class Functions {
     }
 
     public static String getNowDate() {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd").format(Calendar.getInstance().getTime());
+        String timeStamp = new SimpleDateFormat("yyyy-MM-dd").format(Calendar.getInstance().getTime());
         return timeStamp;
     }
 
@@ -64,4 +64,10 @@ public class Functions {
             return false;
         return true;
     }
+
+    public static Integer parseToInteger(String val){
+        return Integer.parseInt(val);
+    }
+
+    public static String parseToString(Integer val){ return String.valueOf(val); }
 }

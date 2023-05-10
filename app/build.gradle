@@ -62,4 +62,6 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:2.4.1"
+
+    implementation "androidx.cardview:cardview:1.0.0"
 }

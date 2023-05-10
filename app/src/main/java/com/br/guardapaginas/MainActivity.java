@@ -8,11 +8,14 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.Gender;
 import com.br.guardapaginas.classes.User;
@@ -22,6 +25,7 @@ import com.br.guardapaginas.fragments.HomeFragment;
 import com.br.guardapaginas.fragments.ReaderFragment;
 import com.br.guardapaginas.helpers.Functions;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -61,12 +65,33 @@ public class MainActivity extends AppCompatActivity {
 
         Gender genderObj = new Gender(getApplicationContext());
 //        genderObj.recyclyBD();
-//        genderObj.setName("drama");
+//        genderObj.setName("drama keen");
 //        Boolean result = genderObj.save(genderObj);
 //        System.out.println("Resultado:  "+result);
-        List<Gender> data = genderObj.fetchAll(null);
+        List<Gender> data = genderObj.fetchAll("1");
         System.out.println("Dados:");
         System.out.println(genderObj.parseToString(data));
+
+        Book obj = new Book(getApplicationContext());
+        obj = obj.findById(1);
+        obj.setTitle("O senhor dos aneis");
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Bitmap foto = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.guardalivros_logo);
+        foto.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] photo = baos.toByteArray();
+
+        obj.setBookCover(photo);
+
+        foto.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        byte[] photo = baos.toByteArray();
+        obj.setGender(1);
+        obj.save(obj);
+System.out.println("Id encontrado "+obj.getBookCover());
+        List<Book> a = obj.fetchAll(null);
+        for(Book e : a){
+            System.out.println(e.getTitle());
+        }
+
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
