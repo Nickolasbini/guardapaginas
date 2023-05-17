@@ -1,41 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/itemOfList"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:layout_marginLeft="15dp"
     android:layout_marginTop="10dp"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_marginRight="15dp"
+    android:background="#6BD6D6D6"
+    android:padding="15dp">
 
     <ImageView
+        android:id="@+id/bookCover"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        android:id="@+id/bookCover"
-        android:layout_marginRight="10dp"
-        android:layout_centerVertical="true"
-        />
+        android:layout_marginRight="10dp" />
+
     <TextView
+        android:id="@+id/genderName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bookTitle"
         android:layout_toEndOf="@id/bookCover"
         android:textColor="@color/black"
         android:textSize="20dp"
         tools:text="Name" />
 
     <TextView
+        android:id="@+id/bookGenders"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/bookGenders"
+        android:layout_below="@id/genderName"
         android:layout_toEndOf="@id/bookCover"
-        android:layout_below="@id/bookTitle"
         android:textColor="@color/black"
         android:textSize="20dp"
         tools:text="Fantasy/Drama" />
-    
+
     <LinearLayout
+        android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:layout_below="@id/bookGenders"
         android:layout_marginTop="10dp"
-        android:background="#DAD8D8"
-        />
+        android:background="#DAD8D8" />
+
 </RelativeLayout>

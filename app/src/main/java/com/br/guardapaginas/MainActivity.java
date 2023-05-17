@@ -5,11 +5,15 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
@@ -35,6 +39,7 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     ActivityMainBinding binding;
 
+    @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,31 +70,14 @@ public class MainActivity extends AppCompatActivity {
 
         Gender genderObj = new Gender(getApplicationContext());
 //        genderObj.recyclyBD();
-//        genderObj.setName("drama keen");
-//        Boolean result = genderObj.save(genderObj);
-//        System.out.println("Resultado:  "+result);
-        List<Gender> data = genderObj.fetchAll("1");
-        System.out.println("Dados:");
-        System.out.println(genderObj.parseToString(data));
-
-        Book obj = new Book(getApplicationContext());
-        obj = obj.findById(1);
-        obj.setTitle("O senhor dos aneis");
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-        Bitmap foto = BitmapFactory.decodeResource(getApplicationContext().getResources(), R.drawable.guardalivros_logo);
-        foto.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] photo = baos.toByteArray();
-
-        obj.setBookCover(photo);
-
-        foto.compress(Bitmap.CompressFormat.PNG, 100, baos);
-        byte[] photo = baos.toByteArray();
-        obj.setGender(1);
-        obj.save(obj);
-System.out.println("Id encontrado "+obj.getBookCover());
-        List<Book> a = obj.fetchAll(null);
-        for(Book e : a){
-            System.out.println(e.getTitle());
+        String[] defaultGender = {"drama", "romance", "terror", "misterio", "aventura", "ação"};
+        for(Integer i = 0; i < defaultGender.length; i++){
+            Gender obj = new Gender(getApplicationContext());
+            List<Gender> result = obj.fetchByName(defaultGender[i]);
+            if(result.size() != 0)
+                continue;
+            obj.setName(defaultGender[i]);
+            obj.save(obj);
         }
 
 

@@ -6,6 +6,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 
+import com.br.guardapaginas.helpers.Functions;
+
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +30,13 @@ public class Book extends DBHandler{
 
     private String status;
 
-    private int gender;
+    private String[] genders;
 
     private String bookLanguage;
 
     private String numberOfPages;
 
-    private Bitmap bookCover;
+    private byte[] bookCover;
 
     public int getId() {
         return id;
@@ -84,11 +87,11 @@ public class Book extends DBHandler{
         this.status = status;
     }
 
-    public int getGender() {
-        return gender;
+    public String[] getGenders() {
+        return genders;
     }
-    public void setGender(int gender) {
-        this.gender = gender;
+    public void setGenders(String[] genders) {
+        this.genders = genders;
     }
 
     public String getBookLanguage() {
@@ -105,7 +108,7 @@ public class Book extends DBHandler{
         this.numberOfPages = numberOfPages;
     }
 
-    public Bitmap getBookCover() {
+    public byte[] getBookCover() {
         return bookCover;
     }
     public void setBookCover(byte[] bookCover) {
@@ -127,10 +130,9 @@ public class Book extends DBHandler{
         contentValues.put("author", book.getAuthor());
         contentValues.put("releaseDate", book.getReleaseDate());
         contentValues.put("editorName", book.getEditorName());
-        contentValues.put("gender", book.getGender());
         contentValues.put("bookLanguage", book.getBookLanguage());
         contentValues.put("numberOfPages", book.getNumberOfPages());
-        contentValues.put("bookCover", book.getBookCover().toString());
+        contentValues.put("bookCover", book.getBookCover());
         Integer result = 0;
         if(book.getId() > 0) {
             result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(book.getId())});
@@ -138,7 +140,11 @@ public class Book extends DBHandler{
             contentValues.put("status", this.ACTIVE);
             result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
-        return (result > 0 ? true : false);
+        Boolean saveResult = (result > 0 ? true : false);
+        if(!saveResult)
+            return false;
+        BookGenders bookGendersObj = new BookGenders(currentContext);
+        return bookGendersObj.updateBookGender(Functions.parseToString(book.getId()), book.getGenders());
     }
 
     @SuppressLint("Range")
@@ -163,9 +169,10 @@ public class Book extends DBHandler{
             book.setReleaseDate(cursor.getString(cursor.getColumnIndex("releaseDate")));
             book.setEditorName(cursor.getString(cursor.getColumnIndex("editorName")));
             book.setStatus(cursor.getString(cursor.getColumnIndex("status")));
-            book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
+//            book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
             book.setBookLanguage(cursor.getString(cursor.getColumnIndex("bookLanguage")));
             book.setNumberOfPages(cursor.getString(cursor.getColumnIndex("numberOfPages")));
+            book.setBookCover(cursor.getBlob(cursor.getColumnIndex("bookCover")));
             list.add(book);
             System.out.println("ID do livro  "+book.getId());
             cursor.moveToNext();
@@ -190,9 +197,10 @@ public class Book extends DBHandler{
         book.setReleaseDate(cursor.getString(cursor.getColumnIndex("releaseDate")));
         book.setEditorName(cursor.getString(cursor.getColumnIndex("editorName")));
         book.setStatus(cursor.getString(cursor.getColumnIndex("status")));
-        book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
+//        book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
         book.setBookLanguage(cursor.getString(cursor.getColumnIndex("bookLanguage")));
         book.setNumberOfPages(cursor.getString(cursor.getColumnIndex("numberOfPages")));
+        book.setBookCover(cursor.getBlob(cursor.getColumnIndex("bookCover")));
         return book;
     }
 
@@ -209,21 +217,76 @@ public class Book extends DBHandler{
     }
 
     @SuppressLint("Range")
-    public String getGenders(){
+    public String getGendersName(){
         String gendersString = "";
-        ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
-        stringBuilderQuery.append("SELECT g.name AS genderName FROM bookGenders AS bg LEFT JOIN genders AS g WHERE bg.book = "+getId());
+        stringBuilderQuery.append("SELECT g.name AS genderName FROM bookGenders AS bg LEFT JOIN genders AS g ON g.id = bg.gender WHERE bg.book = "+getId());
         Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
         cursor.moveToFirst();
         while(!cursor.isAfterLast()){
             String genderName = cursor.getString(cursor.getColumnIndex("genderName"));
-            if(cursor.isLast() == true){
+            if(cursor.isLast()){
                 gendersString += " " + genderName;
             }else {
                 gendersString += " " + genderName + " |";
             }
+            cursor.moveToNext();
         }
         return gendersString;
+    }
+
+    @SuppressLint("Range")
+    public List<String[]> getGendersIdsAndNames(){
+        List<String[]> results = new ArrayList<String[]>();
+        StringBuilder stringBuilderQuery = new StringBuilder();
+        stringBuilderQuery.append("SELECT g.id AS genderId, g.name AS genderName FROM bookGenders AS bg LEFT JOIN genders AS g ON g.id = bg.gender WHERE bg.book = "+this.getId());
+        Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
+        cursor.moveToFirst();
+        String ids   = "";
+        String names = "";
+        while(!cursor.isAfterLast()){
+            String genderId   = cursor.getString(cursor.getColumnIndex("genderId"));
+            String genderName = cursor.getString(cursor.getColumnIndex("genderName"));
+            if(cursor.isLast()){
+                ids   += genderId;
+                names += genderName;
+            }else {
+                ids   += genderId   + ",";
+                names += genderName + ",";
+            }
+            cursor.moveToNext();
+        }
+        results.add(Functions.explode(ids,   ","));
+        results.add(Functions.explode(names, ","));
+        return results;
+    }
+
+    public String[] getAvaliableLanguages(){
+        return new String[]{"Português","Inglês","Espanhol"};
+    }
+
+    public Integer getLanguagePosition(){
+        String[] languageItems = this.getAvaliableLanguages();
+        String language        = this.getBookLanguage();
+        System.out.println("Minha linguagem " + language);
+        Integer position       = null;
+        for(Integer i = 0; i < languageItems.length; i++){
+            if(languageItems[i].equals(language)) {
+                position = i;
+                break;
+            }
+        }
+        return position;
+    }
+
+    public String getFormatedReleasedDate(){
+        if(this.getReleaseDate() == null)
+            return "";
+        return this.getReleaseDate();
+    }
+
+    public Boolean saveGenders(String[] gendersId){
+        BookGenders bg = new BookGenders(currentContext);
+        return bg.updateBookGender(Functions.parseToString(this.getId()), gendersId);
     }
 }

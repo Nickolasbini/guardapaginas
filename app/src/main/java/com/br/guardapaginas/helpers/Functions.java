@@ -1,5 +1,8 @@
 package com.br.guardapaginas.helpers;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,8 +69,58 @@ public class Functions {
     }
 
     public static Integer parseToInteger(String val){
+        if(val == null)
+            return 0;
         return Integer.parseInt(val);
     }
 
-    public static String parseToString(Integer val){ return String.valueOf(val); }
+    public static String parseToString(Integer val){
+        if(val == null)
+            return "0";
+        return String.valueOf(val);
+    }
+
+    public static Bitmap parseByteArrayToBitMap(byte[] binary){
+        Bitmap result = BitmapFactory.decodeByteArray(binary, 0, binary.length);
+        return result;
+    }
+
+    public static String formatDate(String dateString) {
+        System.out.println("A data enviada: "+dateString);
+        if (dateString == null)
+            return "";
+        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
+        return format.format(Date.parse(dateString));
+    }
+
+    public static String parsePtDateToEn(String ptDate){
+        String[] array        = Functions.explode(ptDate, "-");
+        String enFormatedDate = array[2] + "-" + array[1] + "-" + array[0];
+        return enFormatedDate;
+    }
+
+    public static String implode(String[] array, String glue){
+        if(array == null || array.length < 1)
+            return "";
+        if(glue == null)
+            glue = "!@!";
+        String val    = "";
+        Integer total = array.length;
+        Integer last  = total - 1;
+        for(Integer i = 0; i < total; i++){
+            if(i == last){
+                val += array[i];
+            }else{
+                val += array[i] + glue;
+            }
+        }
+        return val;
+    }
+
+    public static String[] explode(String value, String glue){
+        if(glue == null)
+            glue = "!@!";
+        String[] array = value.split(glue);
+        return array;
+    }
 }

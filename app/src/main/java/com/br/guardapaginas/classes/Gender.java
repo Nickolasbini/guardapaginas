@@ -117,7 +117,7 @@ public class Gender extends DBHandler{
 
     @SuppressLint("Range")
     public Gender findById(Integer id){
-        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM aluno where id = " + id, null);
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+" where id = " + id, null);
         cursor.moveToFirst();
         Gender gender = new Gender(currentContext);
         gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
@@ -125,6 +125,65 @@ public class Gender extends DBHandler{
         gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
         gender.setName(cursor.getString(cursor.getColumnIndex("status")));
         return gender;
+    }
+
+    @SuppressLint("Range")
+    public List<Gender> getGendersByStatusWithoutThisIds(String status, String ids){
+        if(status == null)
+            status = "1";
+        ArrayList list = new ArrayList();
+        StringBuilder stringBuilderQuery = new StringBuilder();
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND ID NOT IN("+ids+")", new String[]{status});
+        cursor.moveToFirst();
+        Gender gender;
+        while(!cursor.isAfterLast()){
+            gender = new Gender(currentContext);
+            gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            gender.setName(cursor.getString(cursor.getColumnIndex("name")));
+            gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
+            gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            list.add(gender);
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    @SuppressLint("Range")
+    public List<Gender> fetchByName(String name){
+        ArrayList list = new ArrayList();
+        StringBuilder stringBuilderQuery = new StringBuilder();
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE name = ?", new String[]{name});
+        cursor.moveToFirst();
+        Gender gender;
+        while(!cursor.isAfterLast()){
+            gender = new Gender(currentContext);
+            gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            gender.setName(cursor.getString(cursor.getColumnIndex("name")));
+            gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
+            gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            list.add(gender);
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    @SuppressLint("Range")
+    public List<Gender> getByIds(String[] ids){
+        String idsString = Functions.implode(ids, ",");
+        ArrayList list   = new ArrayList();
+        Cursor cursor   = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE id IN ("+idsString+")", null);
+        cursor.moveToFirst();
+        Gender gender;
+        while(!cursor.isAfterLast()){
+            gender = new Gender(currentContext);
+            gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            gender.setName(cursor.getString(cursor.getColumnIndex("name")));
+            gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
+            gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            list.add(gender);
+            cursor.moveToNext();
+        }
+        return list;
     }
 
     public String parseToString(List<Gender> listOfGenders){

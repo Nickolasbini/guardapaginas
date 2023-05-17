@@ -1,6 +1,10 @@
 package com.br.guardapaginas.fragments;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -9,16 +13,23 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.holders.BookAdapter;
+import com.br.guardapaginas.classes.holders.BookRecycleViewInterface;
+import com.br.guardapaginas.helpers.Functions;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 /**
@@ -26,9 +37,9 @@ import java.util.List;
  * Use the {@link BookFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class BookFragment extends Fragment {
+public class BookFragment extends Fragment implements BookRecycleViewInterface {
 
-    public static final String BOOK_ID = "0";
+    List<Book> listOfMyBooks;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -38,6 +49,8 @@ public class BookFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    View currentView;
+    RecyclerView recyclerView;
 
     public BookFragment() {
         // Required empty public constructor
@@ -73,37 +86,16 @@ public class BookFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_book, container, false);
-
-        // code goes here
-        RecyclerView recyclerView = view.findViewById(R.id.listOfBooks);
-        List<Book> listOfMyBooks  = getMyBooks("1");
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new BookAdapter(getContext(), listOfMyBooks));
-
-//        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-//            Bundle extras = data.getExtras();
-//            Bitmap imageBitmap = (Bitmap) extras.get("data");
-//            imageView.setImageBitmap(imageBitmap);
-//        }
-
-//        Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
-//        getIntent.setType("image/*");
-//        Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-//        pickIntent.setType("image/*");
-//        Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
-//        chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[] {pickIntent});
-//        startActivityForResult(chooserIntent, 1);
-//        Bundle extras = data.getExtras();
-//        Bitmap imageBitmap = (Bitmap) extras.get("data");
-//        imageView.setImageBitmap(imageBitmap);
+        View view   = inflater.inflate(R.layout.fragment_book, container, false);
+        currentView = view;
+        listBooks();
 
         ImageView saveBookBtn = (ImageView) view.findViewById(R.id.addNewBookBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent saveBookIntent = new Intent(getActivity().getApplicationContext(), SaveBookView.class);
-                saveBookIntent.putExtra("BOOK_ID", "50");
-                getActivity().startActivity(saveBookIntent);
+                saveBookIntent.putExtra("BOOK_ID", "0");
+                startActivityForResult(saveBookIntent, 1);
             }
         });
 
@@ -126,4 +118,31 @@ public class BookFragment extends Fragment {
         List<Book> results = obj.fetchAll(status);
         return results;
     }
+
+    public void listBooks(){
+        recyclerView = currentView.findViewById(R.id.listOfBooks);
+        listOfMyBooks  = getMyBooks("1");
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new BookAdapter(getContext(), listOfMyBooks, this));
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent saveBookIntent = new Intent(getActivity().getApplicationContext(), SaveBookView.class);
+        saveBookIntent.putExtra("BOOK_ID", Functions.parseToString(listOfMyBooks.get(position).getId()));
+        startActivityForResult(saveBookIntent, 1);
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        System.out.println("Aqui esta o código: "+requestCode);
+        switch(requestCode) {
+            case 1:
+                if(resultCode == getActivity().RESULT_OK){
+                    listBooks();
+                }
+                break;
+        }
+    };
 }
