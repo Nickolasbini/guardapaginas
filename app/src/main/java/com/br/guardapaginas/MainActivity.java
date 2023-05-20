@@ -16,18 +16,21 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
+import android.se.omapi.Session;
 import android.view.View;
 import android.widget.Button;
 
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.Gender;
+import com.br.guardapaginas.classes.Institution;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.fragments.BookFragment;
 import com.br.guardapaginas.fragments.HomeFragment;
 import com.br.guardapaginas.fragments.ReaderFragment;
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.helpers.SessionManagement;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -46,40 +49,11 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-//        User u = new User(getApplicationContext());
-//        ArrayList<User> p = u.fetchAll();
-//        System.out.println("Total:  "+p);
-//        Integer po = 0;
-//        for(User i : p){
-//            System.out.println("Id:  "+i.getId()+"  |   Nome: "+i.getName() + "   Email: "+i.getEmail()+"   Senha: "+i.getPassword());
-//            if(po.equals(0)){
-//                i.setEmail("nickolasbini@hotmail.com");
-//                i.setPassword("12345");
-//                System.out.println("MEEE");
-//            }else{
-//                System.out.println("DEEEE");
-//                i.setEmail("email" + po.toString() + "@hotmail.com");
-//                i.setPassword("1");
-//            }
-//            System.out.println("Nova senha: "+i.getPassword()+ "  Mail: "+i.getEmail());
-//            System.out.println(i.saveUser(i));
-//            po++;
-//        }
-//
-//        performLogin("nickolasbini@hotmail.com", "12345");
+        buildBaseData();
 
-        Gender genderObj = new Gender(getApplicationContext());
-//        genderObj.recyclyBD();
-        String[] defaultGender = {"drama", "romance", "terror", "misterio", "aventura", "ação"};
-        for(Integer i = 0; i < defaultGender.length; i++){
-            Gender obj = new Gender(getApplicationContext());
-            List<Gender> result = obj.fetchByName(defaultGender[i]);
-            if(result.size() != 0)
-                continue;
-            obj.setName(defaultGender[i]);
-            obj.save(obj);
-        }
+//        defaultLogin();
 
+        SessionManagement sessionManagement = new SessionManagement(getApplicationContext());
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
@@ -129,15 +103,53 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public Boolean performLogin(String email, String pass){
-        User userObj            = new User(getApplicationContext());
-        ArrayList<User> results = userObj.findBy("email", email, false);
-        if(results.size() < 1)
-            return false;
-        User object = results.get(0);
-        System.out.println(Functions.hashCheck(object.getPassword(), pass));
-        if(!Functions.hashCheck(object.getPassword(), pass))
-            return false;
-        System.out.println("will logg in");
+//        User userObj            = new User(getApplicationContext());
+//        ArrayList<User> results = userObj.findBy("email", email, false);
+//        if(results.size() < 1)
+//            return false;
+//        User object = results.get(0);
+//        System.out.println(Functions.hashCheck(object.getPassword(), pass));
+//        if(!Functions.hashCheck(object.getPassword(), pass))
+//            return false;
+//        System.out.println("will logg in");
         return true;
+    }
+
+    public Boolean defaultLogin(){
+        User user = new User(getApplicationContext());
+        user      = user.findById(1);
+        if(user == null)
+            return false;
+        SessionManagement sessionManagement = new SessionManagement(getApplicationContext());
+        sessionManagement.saveSession(user);
+        return true;
+    }
+
+    public void buildBaseData(){
+        User user = new User(getApplicationContext());
+        if(user.findById(1) == null) {
+            user.setEmail("nickolasbini@hotmail.com");
+            user.setPassword(Functions.md5("123456"));
+            user.setName("Nickolas Bini");
+            user.saveAdmin();
+        }
+        Institution institution = new Institution(getApplicationContext());
+        if(institution.findById(1) == null){
+            institution.setName("Livraria Nickolas");
+            institution.setEmail("livrarias_nick@hotmail.com");
+            institution.setOwner(1);
+            institution.save();
+        }
+
+        Gender genderObj = new Gender(getApplicationContext());
+        String[] defaultGender = {"drama", "romance", "terror", "misterio", "aventura", "ação"};
+        for(Integer i = 0; i < defaultGender.length; i++){
+            Gender obj = new Gender(getApplicationContext());
+            List<Gender> result = obj.fetchByName(defaultGender[i]);
+            if(result.size() != 0)
+                continue;
+            obj.setName(defaultGender[i]);
+            obj.save(obj);
+        }
     }
 }

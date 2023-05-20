@@ -43,6 +43,10 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         holder.bookGenders.setText(bookItems.get(position).getGendersName());
         if(bookItems.get(position).getBookCover() != null)
             holder.bookCover.setImageBitmap(Functions.parseByteArrayToBitMap(bookItems.get(position).getBookCover()));
+        Book obj = bookItems.get(position);
+        if(obj.getTitle().equals("oiyrf")){
+            System.out.println("Meus generos: "+obj.getGendersName());
+        }
     }
 
     @Override

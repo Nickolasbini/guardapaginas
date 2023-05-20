@@ -64,6 +64,7 @@ public class SaveBookView extends AppCompatActivity {
     String[] languageItems;
     Book bookObject;
     Spinner genderSelect;
+    EditText quantityInput;
 
     String[] gendersId;
     String[] gendersName;
@@ -196,6 +197,7 @@ public class SaveBookView extends AppCompatActivity {
         bookReleaseDate   = (EditText) findViewById(R.id.releaseDateInput);
         bookCover         = (ImageView) findViewById(R.id.bookCoverButton);
         genderSelect      = (Spinner) findViewById(R.id.genderSelect);
+        quantityInput     = (EditText) findViewById(R.id.quantityInput);
     }
 
     public void fillFields(){
@@ -220,6 +222,8 @@ public class SaveBookView extends AppCompatActivity {
                 bookLanguage.setSelection(indexOfLanguage);
             bookGenders.setText(bookObj.getTitle());
             bookReleaseDate.setText(bookObj.getFormatedReleasedDate());
+            quantityInput.setText(bookObj.getQuantityAsNumber());
+            System.out.println("Quantidade :" +bookObj.getQuantityAsNumber());
             bookCover.setImageBitmap(Functions.parseByteArrayToBitMap(bookObj.getBookCover()));
             bookCoverByte = bookObj.getBookCover();
             bookObject = bookObj;
@@ -271,6 +275,7 @@ public class SaveBookView extends AppCompatActivity {
         EditText releaseDate = (EditText) findViewById(R.id.releaseDateInput);
         bookObj.setReleaseDate(releaseDate.getText().toString());
         bookObj.setBookCover(bookCoverByte);
+        bookObj.setQuantity(quantityInput.getText().toString());
         return bookObj;
     }
 
@@ -283,7 +288,6 @@ public class SaveBookView extends AppCompatActivity {
         }else{
             String message = idOfCurrentBook > 0 ? "Livro atualizado com sucesso" : "Livro cadastrado com sucesso";
             addMessageToToast(message);
-            bookObject.saveGenders(gendersId);
             return true;
         }
     }
@@ -296,7 +300,6 @@ public class SaveBookView extends AppCompatActivity {
                 if(resultCode == RESULT_OK){
                     Uri selectedImage = data.getData();
                     String[] filePathColumn = {MediaStore.Images.Media.DATA};
-
                     InputStream iStream = null;
                     try {
                         iStream = getContentResolver().openInputStream(selectedImage);
@@ -308,11 +311,8 @@ public class SaveBookView extends AppCompatActivity {
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
-
                     Cursor cursor = getContentResolver().query(selectedImage, filePathColumn, null, null, null);
                     cursor.moveToFirst();
-
-
                     int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                     String filePath = cursor.getString(columnIndex);
                     cursor.close();
@@ -322,12 +322,12 @@ public class SaveBookView extends AppCompatActivity {
                     byte[] imageInByte = stream.toByteArray();
                     long lengthbmp = imageInByte.length;
                     if(lengthbmp >= 65535){
+                        System.out.println("Size  "+lengthbmp);
                         addMessageToToast("Imagem muito grande!");
                         return;
                     }
                     bookCoverBitMap = yourSelectedImage;
                     bookCoverButton.setImageBitmap(yourSelectedImage);
-                    /* Now you have choosen image in Bitmap format in object "yourSelectedImage". You can use it in way you want! */
                 }
                 break;
             case 200:
@@ -339,7 +339,6 @@ public class SaveBookView extends AppCompatActivity {
                     gendersId   = Functions.explode(genderIdsString  , ",");
                     gendersName = Functions.explode(genderNamesString, ",");
                     bookGenders.setText(genderNamesString);
-
                     Integer sizeOfArray = gendersName.length;
                     String[] arrayToUse = new String[sizeOfArray];
                     for(Integer i = 0; i < sizeOfArray; i++){

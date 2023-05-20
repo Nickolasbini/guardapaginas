@@ -26,6 +26,8 @@ public class Book extends DBHandler{
 
     private String releaseDate;
 
+    private String quantity;
+
     private String editorName;
 
     private String status;
@@ -72,6 +74,9 @@ public class Book extends DBHandler{
     public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
+
+    public String getQuantity() { return quantity; };
+    public void setQuantity(String quantity){ this.quantity = quantity; }
 
     public String getEditorName() {
         return editorName;
@@ -133,6 +138,8 @@ public class Book extends DBHandler{
         contentValues.put("bookLanguage", book.getBookLanguage());
         contentValues.put("numberOfPages", book.getNumberOfPages());
         contentValues.put("bookCover", book.getBookCover());
+        contentValues.put("quantity", book.getQuantity());
+        contentValues.put("institution", getUserInstitution());
         Integer result = 0;
         if(book.getId() > 0) {
             result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(book.getId())});
@@ -143,20 +150,27 @@ public class Book extends DBHandler{
         Boolean saveResult = (result > 0 ? true : false);
         if(!saveResult)
             return false;
+        book.setId(result);
         BookGenders bookGendersObj = new BookGenders(currentContext);
         return bookGendersObj.updateBookGender(Functions.parseToString(book.getId()), book.getGenders());
     }
 
     @SuppressLint("Range")
-    public List<Book> fetchAll(String status) {
+    public List<Book> fetchAll(String status, String name) {
         ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
-        if(status == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName());
-            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
+        if(status == null && name == null) {
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (institution IS NULL OR institution = ?)");
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
+        }else if(status != null && name == null) {
+            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution IS NULL OR institution = ?)", new String[]{status, getUserInstitution()});
+        }else if(status == null && name != null){
+            String likeParam = "%"+name+"%";
+            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE title LIKE ? AND (institution IS NULL OR institution = ?)", new String[]{likeParam, getUserInstitution()});
         }else{
-            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
+            String likeParam = "%"+name+"%";
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND title LIKE ? AND (institution IS NULL OR institution = ?)", new String[]{status, likeParam, getUserInstitution()});
         }
         cursor.moveToFirst();
         Book book;
@@ -172,11 +186,46 @@ public class Book extends DBHandler{
 //            book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
             book.setBookLanguage(cursor.getString(cursor.getColumnIndex("bookLanguage")));
             book.setNumberOfPages(cursor.getString(cursor.getColumnIndex("numberOfPages")));
+            book.setQuantity(cursor.getString(cursor.getColumnIndex("quantity")));
             book.setBookCover(cursor.getBlob(cursor.getColumnIndex("bookCover")));
             list.add(book);
-            System.out.println("ID do livro  "+book.getId());
             cursor.moveToNext();
         }
+        return list;
+    }
+
+    public List<Book> listPaginated(String status, String search, Integer page){
+        page                  = (page == null ? 1 : page);
+        ArrayList list        = new ArrayList();
+        Cursor cursor         = null;
+        search                = (search == null ? "" : search);
+        String likeParam      = "%"+search+"%";
+        cursor                = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE status = ? AND title LIKE ?", new String[]{status, likeParam});
+        Integer total         = cursor.getCount();
+        Integer perPage       = 10;
+        perPage               = 10 * page;
+        cursor                = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE status = ? AND title LIKE ? LIMIT ?", new String[]{status, likeParam, Integer.toString(perPage)});
+        cursor.moveToFirst();
+        Book book;
+        while(!cursor.isAfterLast()){
+            book = new Book(currentContext);
+            book.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            book.setTitle(cursor.getString(cursor.getColumnIndex("title")));
+            book.setSynopsis(cursor.getString(cursor.getColumnIndex("synopsis")));
+            book.setAuthor(cursor.getString(cursor.getColumnIndex("author")));
+            book.setReleaseDate(cursor.getString(cursor.getColumnIndex("releaseDate")));
+            book.setEditorName(cursor.getString(cursor.getColumnIndex("editorName")));
+            book.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+//            book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
+            book.setBookLanguage(cursor.getString(cursor.getColumnIndex("bookLanguage")));
+            book.setNumberOfPages(cursor.getString(cursor.getColumnIndex("numberOfPages")));
+            book.setQuantity(cursor.getString(cursor.getColumnIndex("quantity")));
+            book.setBookCover(cursor.getBlob(cursor.getColumnIndex("bookCover")));
+            list.add(book);
+            cursor.moveToNext();
+        }
+        System.out.println("Numero de resultados: "+cursor.getCount());
+        System.out.println("Pagina "+page);
         return list;
     }
 
@@ -200,6 +249,7 @@ public class Book extends DBHandler{
 //        book.setGender(cursor.getInt(cursor.getColumnIndex("gender")));
         book.setBookLanguage(cursor.getString(cursor.getColumnIndex("bookLanguage")));
         book.setNumberOfPages(cursor.getString(cursor.getColumnIndex("numberOfPages")));
+        book.setQuantity(cursor.getString(cursor.getColumnIndex("quantity")));
         book.setBookCover(cursor.getBlob(cursor.getColumnIndex("bookCover")));
         return book;
     }
@@ -223,6 +273,7 @@ public class Book extends DBHandler{
         stringBuilderQuery.append("SELECT g.name AS genderName FROM bookGenders AS bg LEFT JOIN genders AS g ON g.id = bg.gender WHERE bg.book = "+getId());
         Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
         cursor.moveToFirst();
+        System.out.println("Tamanho cursor: "+cursor.getCount());
         while(!cursor.isAfterLast()){
             String genderName = cursor.getString(cursor.getColumnIndex("genderName"));
             if(cursor.isLast()){
@@ -268,7 +319,6 @@ public class Book extends DBHandler{
     public Integer getLanguagePosition(){
         String[] languageItems = this.getAvaliableLanguages();
         String language        = this.getBookLanguage();
-        System.out.println("Minha linguagem " + language);
         Integer position       = null;
         for(Integer i = 0; i < languageItems.length; i++){
             if(languageItems[i].equals(language)) {
@@ -288,5 +338,12 @@ public class Book extends DBHandler{
     public Boolean saveGenders(String[] gendersId){
         BookGenders bg = new BookGenders(currentContext);
         return bg.updateBookGender(Functions.parseToString(this.getId()), gendersId);
+    }
+
+    public String getQuantityAsNumber(){
+        String quantity = this.getQuantity();
+        if(quantity == null || quantity.equals(""))
+            return "0";
+        return quantity;
     }
 }

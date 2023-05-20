@@ -61,7 +61,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="60dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="150dp"
         android:textAlignment="center"
         app:layout_constraintBottom_toBottomOf="@id/saveBookButton"
         app:layout_constraintTop_toBottomOf="@+id/topMenuOptions">
@@ -143,9 +143,9 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@+id/textView5" />
 
                 <TextView
@@ -164,9 +164,9 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="textPersonName"
+                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
                 <TextView
@@ -185,9 +185,9 @@
                     android:layout_height="wrap_content"
                     android:ems="10"
                     android:inputType="number"
+                    android:textAlignment="center"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    android:textAlignment="center"
                     app:layout_constraintTop_toBottomOf="@+id/textView9" />
 
                 <TextView
@@ -291,6 +291,27 @@
                     app:layout_constraintTop_toBottomOf="@+id/textView20" />
 
                 <TextView
+                    android:id="@+id/textView15"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="30dp"
+                    android:text="Quantidade"
+                    app:layout_constraintEnd_toEndOf="@+id/releaseDateInput"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/releaseDateInput" />
+
+                <EditText
+                    android:id="@+id/quantityInput"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ems="10"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+                <TextView
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -298,7 +319,7 @@
                     android:text="Capa do Livro"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/releaseDateInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/quantityInput" />
 
                 <ImageView
                     android:id="@+id/bookCoverButton"
@@ -326,12 +347,13 @@
         android:text="Salvar Livro"
         app:layout_constraintBottom_toTopOf="@+id/fetchBookByCode"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"/>
 
     <LinearLayout
         android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="5dp"
+        android:layout_marginBottom="100dp"
         android:background="#DAD8D8"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/saveBookButton"></LinearLayout>
@@ -345,5 +367,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/inactiveBookBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="Inativar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fetchBookByCode" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,12 +1,15 @@
 package com.br.guardapaginas.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -15,10 +18,18 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
@@ -26,10 +37,12 @@ import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.holders.BookAdapter;
 import com.br.guardapaginas.classes.holders.BookRecycleViewInterface;
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.helpers.SessionManagement;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -51,6 +64,15 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
     private String mParam2;
     View currentView;
     RecyclerView recyclerView;
+    LinearLayout filterDropdownOptions;
+    ImageView filterDropdown;
+    Boolean filterOptionsOpen = false;
+    Spinner statusSelect;
+    EditText searchInput;
+    TextView noResultLabel;
+    ScrollView bookListScroll;
+    Integer currentPage = 1;
+    List<Boolean> listParameters = new ArrayList<>();
 
     public BookFragment() {
         // Required empty public constructor
@@ -88,7 +110,35 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
         // Inflate the layout for this fragment
         View view   = inflater.inflate(R.layout.fragment_book, container, false);
         currentView = view;
-        listBooks();
+
+        noResultLabel = (TextView) currentView.findViewById(R.id.noResultLabel);
+
+        String[] statusOption = {"Ativo", "inativo"};
+        statusSelect          = (Spinner) view.findViewById(R.id.statusSpinner);
+        ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusOption);
+        statusSelect.setAdapter(genderSpinnerAdapter);
+
+        searchInput = (EditText) view.findViewById(R.id.searchInput);
+
+        listParameters.add(true);
+        listParameters.add(false);
+        listBooks(true, false, currentPage);
+
+        filterDropdownOptions = (LinearLayout) view.findViewById(R.id.filterDropdownOptions);
+        filterDropdownOptions.setVisibility(View.GONE);
+        filterDropdown        = (ImageView) view.findViewById(R.id.showFilterOptions);
+        filterDropdown.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(filterOptionsOpen){
+                    filterOptionsOpen = false;
+                    filterDropdownOptions.setVisibility(View.GONE);
+                }else{
+                    filterOptionsOpen = true;
+                    filterDropdownOptions.setVisibility(View.VISIBLE);
+                }
+            }
+        });
 
         ImageView saveBookBtn = (ImageView) view.findViewById(R.id.addNewBookBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
@@ -110,18 +160,90 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             }
         });
 
+        ImageView refreshButton = (ImageView) view.findViewById(R.id.refreshList);
+        refreshButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listBooks(true, false, currentPage);
+                searchInput.setText("");
+            }
+        });
+
+        ImageView searchButton = (ImageView) view.findViewById(R.id.searchBtn);
+        searchButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                listBooks(false, true, currentPage);
+            }
+        });
+
+        bookListScroll = (ScrollView) view.findViewById(R.id.bookListScroll);
+        bookListScroll.setOnTouchListener(this::onTouch);
+        bookListScroll.getViewTreeObserver().addOnScrollChangedListener(this::onScrollChanged);
+
         return view;
     }
 
-    public List<Book> getMyBooks(String status){
+    // We want to detect scroll and not touch,
+    // so returning false in this member function
+    @SuppressLint("ClickableViewAccessibility")
+    public Boolean onTouch(View po, MotionEvent pi) {
+        return false;
+    }
+
+    // Member function to detect Scroll,
+    // when detected 0, it means bottom is reached
+    public void onScrollChanged() {
+        return;
+//        View view = bookListScroll.getChildAt(bookListScroll.getChildCount() - 1);
+//        Integer topDetector = bookListScroll.getScrollY();
+//        Integer bottomDetector = view.getBottom() - (bookListScroll.getHeight() + bookListScroll.getScrollY());
+//        if (bottomDetector == 0) {
+//
+//            listBooks(listParameters.get(0), listParameters.get(1), currentPage + 1);
+//
+//            Toast.makeText(getContext(), "Scroll View bottom reached", Toast.LENGTH_SHORT).show();
+//        }
+//        if (topDetector <= 0) {
+//            Toast.makeText(getContext(), "Scroll View top reached", Toast.LENGTH_SHORT).show();
+//        }
+    }
+
+    Integer formerResults = null;
+    public List<Book> getMyBooks(String status, String name, Integer pageNumber){
         Book obj = new Book(getContext());
-        List<Book> results = obj.fetchAll(status);
+        List<Book> results = obj.fetchAll(status, name);
+//        if(formerResults == null) {
+//            formerResults = results.size();
+//        }else{
+//            if(results.size() > formerResults) {
+//                currentPage++;
+//                formerResults = results.size();
+//            }
+//        }
         return results;
     }
 
-    public void listBooks(){
-        recyclerView = currentView.findViewById(R.id.listOfBooks);
-        listOfMyBooks  = getMyBooks("1");
+    public void listBooks(Boolean filterByStatus, Boolean filterByName, Integer page){
+        listParameters.set(0, filterByStatus);
+        listParameters.set(1, filterByName);
+        String status = null;
+        if(filterByStatus) {
+            status  = statusSelect.getSelectedItem().toString();
+            status = (status == "Ativo" ? "1" : "0");
+        }
+        String name = null;
+        if(filterByName){
+            name = searchInput.getText().toString();
+            name = (name.equals("") ? null : name);
+        }
+        recyclerView   = currentView.findViewById(R.id.listOfBooks);
+        listOfMyBooks  = getMyBooks(status, name, page);
+        if(listOfMyBooks.size() > 0) {
+            noResultLabel.setVisibility(View.GONE);
+        }else{
+            noResultLabel.setVisibility(View.VISIBLE);
+        }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(new BookAdapter(getContext(), listOfMyBooks, this));
     }
@@ -140,7 +262,8 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
         switch(requestCode) {
             case 1:
                 if(resultCode == getActivity().RESULT_OK){
-                    listBooks();
+                    listBooks(true, false, currentPage);
+                    searchInput.setText("");
                 }
                 break;
         }

@@ -42,10 +42,6 @@ public class GenderSelection extends AppCompatActivity implements GenderRecycleV
         nameOfGenders = intent.getStringExtra("CURRENT_GENDER_NAMES");
         action        = intent.getStringExtra("ACTION");
 
-        System.out.println("Minha ação:  "+action);
-        System.out.println("Meus Ids:  "+idOfGenders);
-        System.out.println("Meus nomes:  "+nameOfGenders);
-
         gendersIdArray = Functions.explode(idOfGenders, ",");
 
         RecyclerView recyclerView = findViewById(R.id.listOfGenders);

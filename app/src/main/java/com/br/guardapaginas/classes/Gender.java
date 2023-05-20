@@ -24,7 +24,7 @@ public class Gender extends DBHandler{
 
     public String createdAt;
 
-    public int institution;
+    public String institution;
 
     public String status;
 
@@ -57,10 +57,10 @@ public class Gender extends DBHandler{
         this.createdAt = createdAt;
     }
 
-    public int getInstitution() {
+    public String getInstitution() {
         return institution;
     }
-    public void setInstitution(int institution) {
+    public void setInstitution(String institution) {
         this.institution = institution;
     }
 
@@ -133,7 +133,7 @@ public class Gender extends DBHandler{
             status = "1";
         ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
-        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND ID NOT IN("+ids+")", new String[]{status});
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND ID NOT IN("+ids+") AND (institution IS NULL OR institution = ?)", new String[]{status, getUserInstitution()});
         cursor.moveToFirst();
         Gender gender;
         while(!cursor.isAfterLast()){
@@ -171,7 +171,7 @@ public class Gender extends DBHandler{
     public List<Gender> getByIds(String[] ids){
         String idsString = Functions.implode(ids, ",");
         ArrayList list   = new ArrayList();
-        Cursor cursor   = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE id IN ("+idsString+")", null);
+        Cursor cursor   = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE id IN ("+idsString+") AND (institution IS NULL OR institution = ?)", new String[]{getUserInstitution()});
         cursor.moveToFirst();
         Gender gender;
         while(!cursor.isAfterLast()){

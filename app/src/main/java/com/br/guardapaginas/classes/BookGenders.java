@@ -11,13 +11,16 @@ public class BookGenders extends DBHandler{
 
     public Boolean updateBookGender(String bookId, String[] genderIdsArray){
         clearBookGenders(bookId);
+        System.out.println("gendersId: "+genderIdsArray.length);
         if(genderIdsArray == null)
             return false;
         for(Integer i = 0; i < genderIdsArray.length; i++) {
+            System.out.println("Dados: "+genderIdsArray[i]);
             ContentValues contentValues = new ContentValues();
             contentValues.put("book", bookId);
             contentValues.put("gender", genderIdsArray[i]);
             Integer result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
+            System.out.println("Resultado:: "+result);
             if(result < 1)
                 return false;
         }

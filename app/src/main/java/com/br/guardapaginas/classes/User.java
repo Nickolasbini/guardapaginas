@@ -1,5 +1,7 @@
 package com.br.guardapaginas.classes;
 
+import android.annotation.SuppressLint;
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import java.util.Base64;
@@ -14,42 +16,32 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.List;
 
 @Entity(tableName = "users")
 public class User extends DBHandler{
-    static final Integer INACTIVE      = 0;
-    static final Integer ADMINISTRATOR = 1;
-    static final Integer READER        = 2;
+    public static final Integer INACTIVE_ADMINISTRATOR = 0;
+    public static final Integer ACTIVE_ADMINISTRATOR   = 1;
+    public static final Integer ACTIVE_READER          = 2;
+    public static final Integer INACTIVE_READER        = 3;
 
-    @PrimaryKey
     public int id;
-
-    @ColumnInfo(name = "name")
     public String name;
-
-    @ColumnInfo(name = "email")
-    public String email;
-
-    @ColumnInfo(name = "password")
-    public String password;
-
-    @ColumnInfo(name = "institution")
-    public Integer institution;
-
-    @ColumnInfo(name = "cpf")
     public String cpf;
-
-    @ColumnInfo(name = "status")
+    public String email;
+    public String password;
     public String status;
+    public String registration;
+    public Integer institution;
 
     public User(Context context){
         super(context);
+        setTableName("users");
     }
 
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -57,7 +49,6 @@ public class User extends DBHandler{
     public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -65,7 +56,6 @@ public class User extends DBHandler{
     public String getEmail() {
         return email;
     }
-
     public void setEmail(String email) {
         this.email = email;
     }
@@ -73,7 +63,6 @@ public class User extends DBHandler{
     public String getPassword() {
         return password;
     }
-
     public void setPassword(String password) {
         this.password = Functions.hashMake(password);
     }
@@ -81,7 +70,6 @@ public class User extends DBHandler{
     public Integer getInstitution() {
         return institution;
     }
-
     public void setInstitution(Integer institution) {
         this.institution = institution;
     }
@@ -89,15 +77,20 @@ public class User extends DBHandler{
     public String getCpf() {
         return cpf;
     }
-
     public void setCpf(String cpf) {
         this.cpf = cpf;
+    }
+
+    public String getRegistration() {
+        return registration;
+    }
+    public void setRegistration(String registration) {
+        this.registration = registration;
     }
 
     public String getStatus() {
         return status;
     }
-
     public void setStatus(String status) {
         this.status = status;
     }
@@ -107,98 +100,83 @@ public class User extends DBHandler{
         return fillable;
     }
 
-    public ArrayList<User> fetchAll(){
-//        String query = "SELECT * FROM users";
-//        Boolean response = execQuery(query);
-//        ArrayList<User> emptyList = new ArrayList<User>(0);
-//        if(!response)
-//            return emptyList;
-//        Cursor results = this.getResults();
-//        Integer total  = results.getCount();
-//        if(results.equals(null) && total > 0)
-//            return emptyList;
-//        ArrayList<User> usersArray = new ArrayList<User>(total);
-//        results.moveToFirst();
-//        for(Integer i = 0; i < total; i++){
-//            User objFetched = buildUserByCursorResult(results);
-//            usersArray.add(objFetched);
-//            results.moveToNext();
-//        }
-//        return usersArray;
-        return null;
-    }
-
-    public User findById(Integer id){
-//        String query = "SELECT * FROM users WHERE id = "+id;
-//        Boolean response = execQuery(query);
-//        if(!response)
-//            return null;
-//        Cursor results = this.getResults();
-//        Integer total  = results.getCount();
-//        if(results.equals(null) && total > 0)
-//            return null;
-//        results.moveToFirst();
-//        User objFetched = buildUserByCursorResult(results);
-//        return objFetched;
-        return null;
-    }
-
-    public ArrayList<User> findBy(String attributeName, String attributeValue, Boolean onlyFirst){
-//        String query = "SELECT * FROM users WHERE "+attributeName+" = '"+attributeValue+"'";
-//        Boolean response = getDBConnection.raw(query);
-//        ArrayList<User> emptyList = new ArrayList<User>(0);
-//        if(!response)
-//            return emptyList;
-//        Cursor results = this.getResults();
-//        Integer total  = results.getCount();
-//        if(results.equals(null) && total > 0)
-//            return emptyList;
-//        results.moveToFirst();
-//        ArrayList<User> objects = new ArrayList<User>(total);
-//        for(Integer i = 0; i < total; i++) {
-//            User objFetched = buildUserByCursorResult(results);
-//            objects.add(objFetched);
-//            results.moveToNext();
-//            if(onlyFirst)
-//                break;
-//        }
-//        return objects;
-        return null;
-    }
-
-    public User buildUserByCursorResult(Cursor data){
-        User obj = new User(currentContext);
-        for(String attribute : this.getFillable()){
-            Integer position = data.getColumnIndex(attribute);
-            String value = data.getString(position);
-            switch(attribute){
-                case "id":
-                    obj.setId(Integer.parseInt(value));
-                    break;
-                case "name":
-                    obj.setName(value);
-                    break;
-                case "email":
-                    obj.setEmail(value);
-                    break;
-                case "password":
-                    obj.setPassword(value);
-                    break;
-                case "cpf":
-                    obj.setCpf(value);
-                    break;
-                case "status":
-                    obj.setStatus(value);
-                    break;
-                case "institution":
-                    if(value == null){
-                        obj.setInstitution(null);
-                    }else{
-                        obj.setInstitution(Integer.parseInt(value));
-                    }
-                    break;
-            }
+    public Integer save(User user, String typeOfUser){
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("name", user.getName());
+        contentValues.put("cpf", user.getCpf());
+        contentValues.put("email", user.getEmail());
+        contentValues.put("password", user.getPassword());
+        contentValues.put("registration", user.getRegistration());
+        contentValues.put("institution", user.getInstitution());
+        Integer result = 0;
+        if(user.getId() > 0) {
+            contentValues.put("status", user.getStatus());
+            result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(user.getId())});
+        }else{
+            String activeStatus = (typeOfUser.equals("ADMIN") ? ACTIVE_ADMINISTRATOR.toString() : ACTIVE_READER.toString());
+            contentValues.put("status", activeStatus);
+            result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
-        return obj;
+        return result;
+    }
+
+    public Integer saveAdmin(){
+        return this.save(this, "ADMIN");
+    }
+
+    public Integer saveReader(){
+        return this.save(this, "READER");
+    }
+
+    @SuppressLint("Range")
+    public List<Gender> fetchAll(String status) {
+        ArrayList list = new ArrayList();
+        StringBuilder stringBuilderQuery = new StringBuilder();
+        Cursor cursor = null;
+        if(status == null) {
+            stringBuilderQuery.append("SELECT * FROM " + getTableName());
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
+        }else{
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
+        }
+        cursor.moveToFirst();
+        User user;
+        while(!cursor.isAfterLast()){
+            user = new User(currentContext);
+            user.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            user.setName(cursor.getString(cursor.getColumnIndex("name")));
+            user.setCpf(cursor.getString(cursor.getColumnIndex("cpf")));
+            user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
+            user.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            user.setRegistration(cursor.getString(cursor.getColumnIndex("registration")));
+            user.setInstitution(cursor.getInt(cursor.getColumnIndex("institution")));
+            list.add(user);
+            cursor.moveToNext();
+        }
+        return list;
+    }
+
+    public Integer remove(Integer id){
+        return getDBConnection().delete(getTableName(), "id = ?", new String[]{Integer.toString(id)});
+    }
+
+    @SuppressLint("Range")
+    public User findById(Integer id){
+        Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+" where id = " + id, null);
+        cursor.moveToFirst();
+        User user = null;
+        if(cursor.getCount() > 0) {
+            user = new User(currentContext);
+            user.setId(cursor.getInt(cursor.getColumnIndex("id")));
+            user.setName(cursor.getString(cursor.getColumnIndex("name")));
+            user.setCpf(cursor.getString(cursor.getColumnIndex("cpf")));
+            user.setEmail(cursor.getString(cursor.getColumnIndex("email")));
+            user.setPassword(cursor.getString(cursor.getColumnIndex("password")));
+            user.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            user.setRegistration(cursor.getString(cursor.getColumnIndex("registration")));
+            user.setInstitution(cursor.getInt(cursor.getColumnIndex("institution")));
+        }
+        return user;
     }
 }
