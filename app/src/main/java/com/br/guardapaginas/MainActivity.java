@@ -48,16 +48,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Functions.setSystemColors(this);
 
         buildBaseData();
 
-//        defaultLogin();
-
-        SessionManagement sessionManagement = new SessionManagement(getApplicationContext());
-
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
-
             switch (item.getItemId()){
                 case R.id.homeTab:
                     replaceFragment(new HomeFragment());
@@ -69,7 +65,6 @@ public class MainActivity extends AppCompatActivity {
                     replaceFragment(new ReaderFragment());
                     break;
             }
-
             return true;
         });
     }
@@ -102,32 +97,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(view);
     }
 
-    public Boolean performLogin(String email, String pass){
-//        User userObj            = new User(getApplicationContext());
-//        ArrayList<User> results = userObj.findBy("email", email, false);
-//        if(results.size() < 1)
-//            return false;
-//        User object = results.get(0);
-//        System.out.println(Functions.hashCheck(object.getPassword(), pass));
-//        if(!Functions.hashCheck(object.getPassword(), pass))
-//            return false;
-//        System.out.println("will logg in");
-        return true;
-    }
-
-    public Boolean defaultLogin(){
-        User user = new User(getApplicationContext());
-        user      = user.findById(1);
-        if(user == null)
-            return false;
-        SessionManagement sessionManagement = new SessionManagement(getApplicationContext());
-        sessionManagement.saveSession(user);
-        return true;
-    }
-
     public void buildBaseData(){
         User user = new User(getApplicationContext());
-        if(user.findById(1) == null) {
+        User adminObj = user.findById(1);
+        if(adminObj == null) {
             user.setEmail("nickolasbini@hotmail.com");
             user.setPassword(Functions.md5("123456"));
             user.setName("Nickolas Bini");
@@ -139,6 +112,11 @@ public class MainActivity extends AppCompatActivity {
             institution.setEmail("livrarias_nick@hotmail.com");
             institution.setOwner(1);
             institution.save();
+        }
+        if(adminObj != null && (adminObj.getInstitution() == null || adminObj.getInstitution() == 0)){
+            // Setting the institution
+            adminObj.setInstitution(1);
+            adminObj.saveAdmin();
         }
 
         Gender genderObj = new Gender(getApplicationContext());

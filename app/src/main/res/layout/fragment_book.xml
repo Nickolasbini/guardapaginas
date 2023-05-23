@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:background="#E491ED"
+            android:background="@color/primary_color"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/topMenuOptions">
 
@@ -106,16 +106,6 @@
 
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/pageTitle"
-            android:layout_width="match_parent"
-            android:layout_height="30dp"
-            android:layout_marginTop="5dp"
-            android:text="Meus Livros"
-            android:textAlignment="center"
-            android:textSize="20sp"
-            app:layout_constraintTop_toTopOf="parent" />
-
         <LinearLayout
             android:id="@+id/topMenuOptions"
             android:layout_width="match_parent"
@@ -123,7 +113,7 @@
             android:gravity="fill_horizontal"
             android:orientation="horizontal"
             android:padding="3dp"
-            app:layout_constraintTop_toBottomOf="@+id/pageTitle">
+            tools:layout_editor_absoluteY="35dp">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
@@ -156,7 +146,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/wrapperOfBooks"
+            android:id="@+id/wrapperOfReaders"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -176,14 +166,14 @@
                 android:layout_height="match_parent">
 
                 <ScrollView
-                    android:id="@+id/bookListScroll"
+                    android:id="@+id/readerListScroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="60dp"
                     app:layout_constraintBottom_toTopOf="@+id/addNewBookBtn">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listOfBooks"
+                        android:id="@+id/listOfReaders"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </ScrollView>

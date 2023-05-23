@@ -1,5 +1,6 @@
 package com.br.guardapaginas.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,8 +8,18 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.br.guardapaginas.ProfileView;
 import com.br.guardapaginas.R;
+import com.br.guardapaginas.SaveBookView;
+import com.br.guardapaginas.classes.Book;
+
+import org.w3c.dom.Text;
+
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -21,13 +32,22 @@ public class HomeFragment extends Fragment {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private View currentView;
+    private Book bookObj;
+    private TextView userNameLabel;
+    private TextView totalNumberOfBooks;
+    private ImageView openTotalOfBookBtn;
+    private TextView totalNumberOfBorrowedBooks;
+    private ImageView openTotalOfBorrowedBookBtn;
+    private TextView totalNumberOfDelayedBook;
+    private ImageView openTotalOfDelayedBook;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     public HomeFragment() {
-        // Required empty public constructor
+
     }
 
     /**
@@ -61,6 +81,47 @@ public class HomeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        currentView = inflater.inflate(R.layout.fragment_home, container, false);
+
+        userNameLabel              = (TextView) currentView.findViewById(R.id.userNameLabel);
+        totalNumberOfBooks         = (TextView) currentView.findViewById(R.id.totalNumberOfBooks);
+        openTotalOfBookBtn         = (ImageView) currentView.findViewById(R.id.openTotalOfBookBtn);
+        totalNumberOfBorrowedBooks = (TextView) currentView.findViewById(R.id.totalNumberOfBorrowedBooks);
+        openTotalOfBorrowedBookBtn = (ImageView) currentView.findViewById(R.id.openTotalOfBorrowedBookBtn);
+        totalNumberOfDelayedBook   = (TextView) currentView.findViewById(R.id.totalNumberOfDelayedBook);
+        openTotalOfDelayedBook     = (ImageView) currentView.findViewById(R.id.openTotalOfDelayedBook);
+        bookObj = new Book(getContext());
+        fillBookStatistics();
+
+        ImageView profileButton = (ImageView) currentView.findViewById(R.id.profileButton);
+        profileButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent saveBookIntent = new Intent(getActivity().getApplicationContext(), ProfileView.class);
+                startActivityForResult(saveBookIntent, 1);
+            }
+        });
+
+        return currentView;
     }
+
+    public void fillBookStatistics(){
+        userNameLabel.setText(bookObj.getUserName());
+        List<String> result = bookObj.gatherStatistics();
+        totalNumberOfBooks.setText(result.get(0));
+        totalNumberOfBorrowedBooks.setText(result.get(1));
+        totalNumberOfDelayedBook.setText(result.get(2));
+    }
+
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case 1:
+                if(resultCode == getActivity().RESULT_OK){
+                    fillBookStatistics();
+                }
+                break;
+        }
+    };
 }

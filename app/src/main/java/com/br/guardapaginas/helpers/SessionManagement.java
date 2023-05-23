@@ -20,6 +20,7 @@ public class SessionManagement {
 
     public SessionManagement(Context context){
         currentContext = context;
+        System.out.println("Contexto atual: "+context);
         sharedPreferences = context.getSharedPreferences(SHARED_PREF_NAME,  Context.MODE_PRIVATE);
         editor = sharedPreferences.edit();
     }
@@ -76,6 +77,6 @@ public class SessionManagement {
     }
 
     public void killSession(){
-        sharedPreferences.edit().clear();
+        sharedPreferences.edit().clear().commit();
     }
 }

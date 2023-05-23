@@ -9,12 +9,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -28,7 +26,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
-import com.br.guardapaginas.fragments.BookFragment;
 import com.br.guardapaginas.helpers.Functions;
 import com.br.guardapaginas.views.GenderSelection;
 
@@ -39,6 +36,7 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 public class SaveBookView extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -68,6 +66,7 @@ public class SaveBookView extends AppCompatActivity {
 
     String[] gendersId;
     String[] gendersName;
+    Button inactiveUserBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,29 +74,35 @@ public class SaveBookView extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(R.layout.save_book);
 
+        Functions.setSystemColors(this);
         initInputs();
-
         setDefaultBookCover();
 
         Intent intent = getIntent();
         String idOfBook = intent.getStringExtra("BOOK_ID");
         idOfCurrentBook = Functions.parseToInteger(idOfBook);
-        Button getByCode      = (Button) findViewById(R.id.fetchBookByCode);
-        Button saveBookButton = (Button) findViewById(R.id.saveBookButton);
+        Button getByCode       = (Button) findViewById(R.id.fetchBookByCode);
+        Button saveBookButton  = (Button) findViewById(R.id.saveUserButton);
+        inactiveUserBtn        = (Button) findViewById(R.id.inactiveUserBtn);
         if(idOfCurrentBook > 0){
             setTitle("Editar Livro");
             getByCode.setVisibility(View.GONE);
             saveBookButton.setText("Salvar");
+            inactiveUserBtn.setVisibility(View.VISIBLE);
         }else{
             setTitle("Cadastrar Livro");
             getByCode.setVisibility(View.VISIBLE);
             saveBookButton.setText("Cadastrar");
+            inactiveUserBtn.setVisibility(View.GONE);
         }
         fillFields();
 
         ImageView goBackBtn = (ImageView) findViewById(R.id.goBackBtn);
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                Intent i = new Intent();
+                setResult(Activity.RESULT_OK, i);
+                finishActivity(1);
                 finish();
             }
         });
@@ -140,7 +145,7 @@ public class SaveBookView extends AppCompatActivity {
             }
         });
 
-        Button saveButton = (Button) findViewById(R.id.saveBookButton);
+        Button saveButton = (Button) findViewById(R.id.saveUserButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -184,13 +189,29 @@ public class SaveBookView extends AppCompatActivity {
             }
         });
 
+        inactiveUserBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(bookObject == null || bookObject.getId() < 1){
+                    addMessageToToast("Ação não permitida");
+                    return;
+                }
+                Boolean result = bookObject.inactiveActiveBook();
+                if(!result){
+                    addMessageToToast("Um problema ocorreu, tente novamente");
+                    return;
+                }
+                addMessageToToast("Status do livro atualizado");
+                fillFields();
+            }
+        });
     }
 
     public void initInputs(){
-        bookTitle         = (EditText) findViewById(R.id.titleInput);
-        bookSynopsis      = (EditText) findViewById(R.id.synopsisInput);
-        bookAuthor        = (EditText) findViewById(R.id.authorInput);
-        bookEditorName    = (EditText) findViewById(R.id.editorNameInput);
+        bookTitle         = (EditText) findViewById(R.id.nameInput);
+        bookSynopsis      = (EditText) findViewById(R.id.lastNameInput);
+        bookAuthor        = (EditText) findViewById(R.id.cpfInput);
+        bookEditorName    = (EditText) findViewById(R.id.emailInput);
         bookNumberOfPages = (EditText) findViewById(R.id.numberOfPagesInput);
         bookLanguage      = (Spinner) findViewById(R.id.languageSelect);
         bookGenders       = (EditText) findViewById(R.id.gendersInput);
@@ -211,7 +232,6 @@ public class SaveBookView extends AppCompatActivity {
                 return;
             }
             //  Feed Data By Found Book Object
-            System.out.println(bookObj);
             bookTitle.setText(bookObj.getTitle());
             bookSynopsis.setText(bookObj.getSynopsis());
             bookAuthor.setText(bookObj.getAuthor());
@@ -223,7 +243,6 @@ public class SaveBookView extends AppCompatActivity {
             bookGenders.setText(bookObj.getTitle());
             bookReleaseDate.setText(bookObj.getFormatedReleasedDate());
             quantityInput.setText(bookObj.getQuantityAsNumber());
-            System.out.println("Quantidade :" +bookObj.getQuantityAsNumber());
             bookCover.setImageBitmap(Functions.parseByteArrayToBitMap(bookObj.getBookCover()));
             bookCoverByte = bookObj.getBookCover();
             bookObject = bookObj;
@@ -234,7 +253,8 @@ public class SaveBookView extends AppCompatActivity {
                 ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, gendersName);
                 genderSelect.setAdapter(genderSpinnerAdapter);
             }
-
+            String inactiveActiveButtonText = (bookObj.getStatus().equals(bookObj.ACTIVE) ? "Inativar" : "Ativar");
+            inactiveUserBtn.setText(inactiveActiveButtonText);
         }else{
             //  Empty Book Object
             bookObject = bookObj;
@@ -242,7 +262,7 @@ public class SaveBookView extends AppCompatActivity {
     }
 
     public Boolean verifyInputs(){
-        bookTitle   = (EditText) findViewById(R.id.titleInput);
+        bookTitle   = (EditText) findViewById(R.id.nameInput);
         bookGenders = (EditText) findViewById(R.id.gendersInput);
         if(bookTitle.getText().toString().equals("") || bookTitle.getText().toString() == null){
             addMessageToToast("Informe o título do livro");
@@ -259,13 +279,13 @@ public class SaveBookView extends AppCompatActivity {
         Book bookObj = new Book(getApplicationContext());
         if(idOfCurrentBook > 0)
             bookObj.setId(idOfCurrentBook);
-        EditText title = (EditText) findViewById(R.id.titleInput);
+        EditText title = (EditText) findViewById(R.id.nameInput);
         bookObj.setTitle(title.getText().toString());
-        EditText synopsis = (EditText) findViewById(R.id.synopsisInput);
+        EditText synopsis = (EditText) findViewById(R.id.lastNameInput);
         bookObj.setSynopsis(synopsis.getText().toString());
-        EditText author = (EditText) findViewById(R.id.authorInput);
+        EditText author = (EditText) findViewById(R.id.cpfInput);
         bookObj.setAuthor(author.getText().toString());
-        EditText editor = (EditText) findViewById(R.id.editorNameInput);
+        EditText editor = (EditText) findViewById(R.id.emailInput);
         bookObj.setEditorName(editor.getText().toString());
         EditText numberOfPages = (EditText) findViewById(R.id.numberOfPagesInput);
         bookObj.setNumberOfPages(numberOfPages.getText().toString());

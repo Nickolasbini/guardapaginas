@@ -2,26 +2,18 @@ package com.br.guardapaginas.fragments;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.media.Image;
-import android.net.Uri;
 import android.os.Bundle;
 
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -29,7 +21,6 @@ import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
@@ -37,11 +28,7 @@ import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.holders.BookAdapter;
 import com.br.guardapaginas.classes.holders.BookRecycleViewInterface;
 import com.br.guardapaginas.helpers.Functions;
-import com.br.guardapaginas.helpers.SessionManagement;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -111,6 +98,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
         View view   = inflater.inflate(R.layout.fragment_book, container, false);
         currentView = view;
 
+        getActivity().setTitle("Meus Livros");
         noResultLabel = (TextView) currentView.findViewById(R.id.noResultLabel);
 
         String[] statusOption = {"Ativo", "inativo"};
@@ -177,7 +165,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             }
         });
 
-        bookListScroll = (ScrollView) view.findViewById(R.id.bookListScroll);
+        bookListScroll = (ScrollView) view.findViewById(R.id.readerListScroll);
         bookListScroll.setOnTouchListener(this::onTouch);
         bookListScroll.getViewTreeObserver().addOnScrollChangedListener(this::onScrollChanged);
 
@@ -237,7 +225,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             name = searchInput.getText().toString();
             name = (name.equals("") ? null : name);
         }
-        recyclerView   = currentView.findViewById(R.id.listOfBooks);
+        recyclerView   = currentView.findViewById(R.id.listOfReaders);
         listOfMyBooks  = getMyBooks(status, name, page);
         if(listOfMyBooks.size() > 0) {
             noResultLabel.setVisibility(View.GONE);
@@ -258,7 +246,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
     public void onActivityResult(int requestCode, int resultCode, Intent data)
     {
         super.onActivityResult(requestCode, resultCode, data);
-        System.out.println("Aqui esta o código: "+requestCode);
+        System.out.println("Resultado: "+requestCode + "  resultCode: "+resultCode + "   | "+getActivity().RESULT_OK);
         switch(requestCode) {
             case 1:
                 if(resultCode == getActivity().RESULT_OK){

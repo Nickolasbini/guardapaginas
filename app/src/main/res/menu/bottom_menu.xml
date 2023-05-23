@@ -4,12 +4,17 @@
         android:icon="@drawable/home"
         android:id="@+id/homeTab"
         />
-    <item android:title="Books"
+    <item android:title="Livros"
         android:icon="@drawable/book"
         android:id="@+id/bookTab"
         />
-    <item android:title="Readers"
+    <item android:title="Leitores"
         android:icon="@drawable/reader"
         android:id="@+id/readerTab"
+        />
+
+    <item android:title="Instituição"
+        android:icon="@drawable/institution"
+        android:id="@+id/institutionTab"
         />
 </menu>

@@ -63,7 +63,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginBottom="150dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@id/saveBookButton"
+        app:layout_constraintBottom_toBottomOf="@id/saveUserButton"
         app:layout_constraintTop_toBottomOf="@+id/topMenuOptions">
 
         <LinearLayout
@@ -96,7 +96,7 @@
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <EditText
-                    android:id="@+id/titleInput"
+                    android:id="@+id/nameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -114,10 +114,10 @@
                     android:text="Sinopse"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/titleInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/nameInput" />
 
                 <EditText
-                    android:id="@+id/synopsisInput"
+                    android:id="@+id/lastNameInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -135,10 +135,10 @@
                     android:text="Autor"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/synopsisInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/lastNameInput" />
 
                 <EditText
-                    android:id="@+id/authorInput"
+                    android:id="@+id/cpfInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -156,10 +156,10 @@
                     android:text="Nome da Editora"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/authorInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/cpfInput" />
 
                 <EditText
-                    android:id="@+id/editorNameInput"
+                    android:id="@+id/emailInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:ems="10"
@@ -177,7 +177,7 @@
                     android:text="Número de Páginas"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editorNameInput" />
+                    app:layout_constraintTop_toBottomOf="@+id/emailInput" />
 
                 <EditText
                     android:id="@+id/numberOfPagesInput"
@@ -340,42 +340,44 @@
     </ScrollView>
 
 
-    <Button
-        android:id="@+id/saveBookButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Salvar Livro"
-        app:layout_constraintBottom_toTopOf="@+id/fetchBookByCode"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"/>
-
     <LinearLayout
         android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="5dp"
-        android:layout_marginBottom="100dp"
         android:background="#DAD8D8"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/saveBookButton"></LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        tools:layout_editor_absoluteY="546dp"></LinearLayout>
+
+    <Button
+        android:id="@+id/saveUserButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="Salvar Livro"
+        app:layout_constraintBottom_toTopOf="@+id/fetchBookByCode"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3" />
 
     <Button
         android:id="@+id/fetchBookByCode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="15dp"
         android:text="Buscar Por Código"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/saveUserButton"
+        tools:layout_editor_absoluteY="669dp" />
 
     <Button
-        android:id="@+id/inactiveBookBtn"
+        android:id="@+id/inactiveUserBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
         android:text="Inativar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fetchBookByCode" />
+        app:layout_constraintTop_toBottomOf="@+id/saveUserButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

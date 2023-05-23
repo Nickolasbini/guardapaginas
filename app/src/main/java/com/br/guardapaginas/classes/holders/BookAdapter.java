@@ -44,9 +44,6 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         if(bookItems.get(position).getBookCover() != null)
             holder.bookCover.setImageBitmap(Functions.parseByteArrayToBitMap(bookItems.get(position).getBookCover()));
         Book obj = bookItems.get(position);
-        if(obj.getTitle().equals("oiyrf")){
-            System.out.println("Meus generos: "+obj.getGendersName());
-        }
     }
 
     @Override
@@ -67,7 +64,7 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView, BookRecycleViewInterface bookRecycleViewInterface) {
             super(itemView);
             bookCover   = itemView.findViewById(R.id.bookCover);
-            bookTitle   = itemView.findViewById(R.id.genderName);
+            bookTitle   = itemView.findViewById(R.id.userName);
             bookGenders = itemView.findViewById(R.id.bookGenders);
 
             itemView.setOnClickListener(new View.OnClickListener() {

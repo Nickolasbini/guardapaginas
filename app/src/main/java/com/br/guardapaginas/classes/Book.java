@@ -194,6 +194,7 @@ public class Book extends DBHandler{
         return list;
     }
 
+    @SuppressLint("Range")
     public List<Book> listPaginated(String status, String search, Integer page){
         page                  = (page == null ? 1 : page);
         ArrayList list        = new ArrayList();
@@ -345,5 +346,33 @@ public class Book extends DBHandler{
         if(quantity == null || quantity.equals(""))
             return "0";
         return quantity;
+    }
+
+    public List<String> gatherStatistics(){
+        List<String> response = new ArrayList<String>(3);
+        Cursor totalBooks     = getDBConnection().rawQuery("SELECT * FROM " +getTableName() + " WHERE institution = ? AND status = ?", new String[]{getUserInstitution(), ACTIVE});
+        response.add(Integer.toString(totalBooks.getCount()));
+        Cursor totalBorrowed  = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ?", new String[]{getUserInstitution(), ACTIVE});
+        response.add(Integer.toString(totalBorrowed.getCount()));
+        Cursor totalDelayed   = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ? AND expectedDelivery < ?", new String[]{getUserInstitution(), ACTIVE, Functions.getNowDate()});
+        response.add(Integer.toString(totalDelayed.getCount()));
+        return response;
+    }
+
+    public Boolean inactiveActiveBook(){
+        if(this.getId() < 1)
+            return false;
+        String nextStatus = getNextStatus();
+        if(nextStatus == null)
+            return false;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("status", nextStatus);
+        Integer result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(this.getId())});
+        return (result > 0 ? true : false);
+    }
+
+    public String getNextStatus(){
+        String status = this.getStatus();
+        return (status.equals(ACTIVE) ? INACTIVE : ACTIVE);
     }
 }

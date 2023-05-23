@@ -144,6 +144,8 @@ public class DBHandler extends SQLiteOpenHelper {
     public void setSessionOfUserToVariables(){
         SessionManagement sessionManagement = new SessionManagement(currentContext);
         List<String> data                   = sessionManagement.getSessionUser();
+        if(data == null)
+            return;
         Integer      dataSize               = data.size();
         if(dataSize < 1)
             return;

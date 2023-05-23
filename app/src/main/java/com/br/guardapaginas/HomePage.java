@@ -14,6 +14,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 
+import com.br.guardapaginas.helpers.Functions;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
 
 public class HomePage extends AppCompatActivity {
@@ -25,21 +27,11 @@ public class HomePage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+        Functions.setSystemColors(this);
+        setTitle("Página Inicial");
 
         Intent intent = getIntent();
         String message = intent.getStringExtra(MainActivity.EXTRA_MESSAGE);
-
-
-/*
-        Button btn = (Button) findViewById(R.id.btnSendEmail);
-        btn.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                EditText emailInput = findViewById(R.id.inputEMail);
-                Boolean result = sendEmail(emailInput.getText().toString(), "Testing the message", "This is my first message!!!");
-                System.out.println("Resultado do email");
-                System.out.println(result);
-            }
-        });*/
     }
 
     private Boolean sendEmail(String email, String subject, String message){

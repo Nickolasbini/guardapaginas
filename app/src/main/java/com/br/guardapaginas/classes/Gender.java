@@ -132,7 +132,6 @@ public class Gender extends DBHandler{
         if(status == null)
             status = "1";
         ArrayList list = new ArrayList();
-        StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND ID NOT IN("+ids+") AND (institution IS NULL OR institution = ?)", new String[]{status, getUserInstitution()});
         cursor.moveToFirst();
         Gender gender;
@@ -151,7 +150,6 @@ public class Gender extends DBHandler{
     @SuppressLint("Range")
     public List<Gender> fetchByName(String name){
         ArrayList list = new ArrayList();
-        StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE name = ?", new String[]{name});
         cursor.moveToFirst();
         Gender gender;
