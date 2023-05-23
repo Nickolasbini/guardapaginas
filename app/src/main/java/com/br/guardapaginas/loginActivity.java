@@ -14,9 +14,13 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.br.guardapaginas.classes.Gender;
+import com.br.guardapaginas.classes.Institution;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.helpers.Functions;
 import com.br.guardapaginas.helpers.SessionManagement;
+
+import java.util.List;
 
 public class loginActivity extends AppCompatActivity {
 
@@ -28,6 +32,8 @@ public class loginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Functions.setSystemColors(this);
+
+        buildBaseData();
 
         loginEmailInput = (EditText) findViewById(R.id.loginEmailInput);
         passwordInput   = (EditText) findViewById(R.id.passwordInput);
@@ -102,5 +108,39 @@ public class loginActivity extends AppCompatActivity {
 
     public void addMessageToToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+    }
+
+    public void buildBaseData(){
+        User user = new User(getApplicationContext());
+        User adminObj = user.findById(1);
+        if(adminObj == null) {
+            user.setEmail("nickolasbini@hotmail.com");
+            user.setPassword(Functions.md5("123456"));
+            user.setName("Nickolas Bini");
+            user.saveAdmin();
+        }
+        Institution institution = new Institution(getApplicationContext());
+        if(institution.findById(1) == null){
+            institution.setName("Livraria Nickolas");
+            institution.setEmail("livrarias_nick@hotmail.com");
+            institution.setOwner(1);
+            institution.save();
+        }
+        if(adminObj != null && (adminObj.getInstitution() == null || adminObj.getInstitution() == 0)){
+            // Setting the institution
+            adminObj.setInstitution(1);
+            adminObj.saveAdmin();
+        }
+
+        Gender genderObj = new Gender(getApplicationContext());
+        String[] defaultGender = {"drama", "romance", "terror", "misterio", "aventura", "ação"};
+        for(Integer i = 0; i < defaultGender.length; i++){
+            Gender obj = new Gender(getApplicationContext());
+            List<Gender> result = obj.fetchByName(defaultGender[i]);
+            if(result.size() != 0)
+                continue;
+            obj.setName(defaultGender[i]);
+            obj.save(obj);
+        }
     }
 }

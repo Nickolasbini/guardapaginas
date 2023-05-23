@@ -2,6 +2,7 @@ package com.br.guardapaginas;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -22,12 +23,19 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.views.CaptureScren;
 import com.br.guardapaginas.views.GenderSelection;
+import com.journeyapps.barcodescanner.ScanContract;
+import com.journeyapps.barcodescanner.ScanOptions;
+
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
@@ -203,6 +211,13 @@ public class SaveBookView extends AppCompatActivity {
                 }
                 addMessageToToast("Status do livro atualizado");
                 fillFields();
+            }
+        });
+
+        getByCode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openCameraForReadingISBN();
             }
         });
     }
@@ -399,8 +414,49 @@ public class SaveBookView extends AppCompatActivity {
         }
         return byteBuffer.toByteArray();
     }
-
     public void addMessageToToast(String message){
         Toast.makeText(this, message, Toast.LENGTH_LONG).show();
     }
+
+    private void openCameraForReadingISBN(){
+        ScanOptions scanOptions = new ScanOptions();
+        scanOptions.setPrompt("Volume + liga o flash");
+        scanOptions.setBeepEnabled(true);
+        scanOptions.setOrientationLocked(true);
+        scanOptions.setCaptureActivity(CaptureScren.class);
+        barLauncher.launch(scanOptions);
+    }
+
+    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
+        if(result.getContents() != null){
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Resultado");
+            builder.setMessage(result.getContents());
+            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int which) {
+                    String codeFound = result.getContents();
+                    System.out.println("The code Found: " +codeFound);
+                    consumeISBMAPIData(codeFound);
+                }
+            }).show();
+        }
+    });
+
+    public void consumeISBMAPIData(String codeISBN){
+        if(codeISBN == null || codeISBN.equals("") || codeISBN.length() < 1){
+            addMessageToToast("Código não encontrado");
+            return;
+        }
+        codeISBN = "8533613377";
+        String url = "https://www.googleapis.com/books/v1/volumes?q="+codeISBN;
+        JSONObject responseJson = null;
+        try {
+            responseJson = Functions.getJSONObjectFromURL(url);
+        } catch(Exception e){
+            System.out.println("ISBN call fail: "+e.getMessage().toString());
+            responseJson = null;
+        }
+
+    };
 }
