@@ -1,11 +1,13 @@
 package com.br.guardapaginas.fragments;
 
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -101,6 +103,16 @@ public class HomeFragment extends Fragment {
                 startActivityForResult(saveBookIntent, 1);
             }
         });
+
+        ImageView openTotalOfBookBtn = (ImageView) currentView.findViewById(R.id.openTotalOfBookBtn);
+        openTotalOfBookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                currentView.findViewById(R.id.bookTab).performClick();
+            }
+        });
+
+        ImageView openTotalOfBorrowedBookBtn = (ImageView) currentView.findViewById(R.id.openTotalOfBorrowedBookBtn);
 
         return currentView;
     }
