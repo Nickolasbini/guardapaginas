@@ -71,9 +71,16 @@ public class Gender extends DBHandler{
         this.status = status;
     }
 
-    public Boolean save(Gender gender){
+    public Integer save(){
+        Gender gender = this;
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", gender.getName());
+        if(gender.getInstitution() == null || gender.getInstitution().equals("")) {
+            contentValues.put("institution", gender.getUserInstitution());
+        }else{
+            contentValues.put("institution", gender.getInstitution());
+        }
+        System.out.println("A instituição: "+ gender.getInstitution());
         Integer result = 0;
         if(gender.getId() > 0) {
             contentValues.put("createdAt", gender.getCreatedAt());
@@ -83,19 +90,30 @@ public class Gender extends DBHandler{
             contentValues.put("status", this.ACTIVE);
             result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
-        return (result > 0 ? true : false);
+        return result;
     }
 
     @SuppressLint("Range")
-    public List<Gender> fetchAll(String status) {
+    public List<Gender> fetchAll(String status, String name) {
         ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
-        if(status == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName());
-            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
+        if(status == null && name == null) {
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ?");
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
+        }else if(status != null && name == null) {
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
+        }else if(status == null && name != null) {
+            String nameFormated = "%" + name + "%";
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE name LIKE ? AND institution = ?");
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
+        }else if(status != null && name != null){
+            String nameFormated = "%" + name + "%";
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND name LIKE ? AND institution = ?");
+            cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, nameFormated, getUserInstitution()});
         }else{
-            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ?", new String[]{status});
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND institution = ?", new String[]{status, getUserInstitution()});
         }
         cursor.moveToFirst();
         Gender gender;

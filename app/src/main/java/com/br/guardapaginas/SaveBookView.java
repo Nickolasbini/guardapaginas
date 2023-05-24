@@ -44,7 +44,6 @@ import java.io.InputStream;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
 
 public class SaveBookView extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -415,7 +414,7 @@ public class SaveBookView extends AppCompatActivity {
         return byteBuffer.toByteArray();
     }
     public void addMessageToToast(String message){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     private void openCameraForReadingISBN(){
@@ -449,7 +448,7 @@ public class SaveBookView extends AppCompatActivity {
             return;
         }
         codeISBN = "8533613377";
-        String url = "https://www.googleapis.com/books/v1/volumes?q="+codeISBN;
+        String url = "https://www.googleapis.com/books/v1/volumes?q=8533613377"+codeISBN;
         JSONObject responseJson = null;
         try {
             responseJson = Functions.getJSONObjectFromURL(url);

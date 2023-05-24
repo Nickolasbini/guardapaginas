@@ -136,7 +136,6 @@ public class User extends DBHandler{
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && name == null) {
             stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
-            System.out.println("Aqui na query status");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
         }else if(status == null && name != null) {
             String nameFormated = "%" + name + "%";

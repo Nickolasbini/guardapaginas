@@ -18,9 +18,7 @@ import com.br.guardapaginas.helpers.Functions;
 import java.util.Locale;
 
 public class SaveUserView extends AppCompatActivity {
-
     ActivityMainBinding binding;
-
     EditText nameInput;
     EditText cpfInput;
     EditText emailInput;
@@ -133,7 +131,7 @@ public class SaveUserView extends AppCompatActivity {
             addMessageToToast("Informe a instituição");
             return false;
         }
-        if(cpf != null && !Functions.isCPFValid(cpf)){
+        if(cpf != null && !cpf.equals("") && !Functions.isCPFValid(cpf)){
             addMessageToToast("CPF inválido");
             return false;
         }

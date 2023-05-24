@@ -146,7 +146,7 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/wrapperOfReaders"
+            android:id="@+id/wrapperOfGenders"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:orientation="vertical"
@@ -166,20 +166,20 @@
                 android:layout_height="match_parent">
 
                 <ScrollView
-                    android:id="@+id/readerListScroll"
+                    android:id="@+id/genderListScroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="60dp"
-                    app:layout_constraintBottom_toTopOf="@+id/addNewBookBtn">
+                    app:layout_constraintBottom_toTopOf="@+id/addNewGenderBtn">
 
                     <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/listOfReaders"
+                        android:id="@+id/listOfGender"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
                 </ScrollView>
 
                 <ImageView
-                    android:id="@+id/addNewBookBtn"
+                    android:id="@+id/addNewGenderBtn"
                     android:layout_width="65dp"
                     android:layout_height="52dp"
                     android:src="@android:drawable/ic_menu_add"

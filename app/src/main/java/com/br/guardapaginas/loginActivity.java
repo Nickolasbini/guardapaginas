@@ -140,7 +140,7 @@ public class loginActivity extends AppCompatActivity {
             if(result.size() != 0)
                 continue;
             obj.setName(defaultGender[i]);
-            obj.save(obj);
+            obj.save();
         }
     }
 }

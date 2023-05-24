@@ -13,8 +13,8 @@
         android:id="@+id/readerTab"
         />
 
-    <item android:title="Instituição"
-        android:icon="@drawable/institution"
-        android:id="@+id/institutionTab"
+    <item android:title="Gêneros"
+        android:icon="@drawable/gender_icon"
+        android:id="@+id/genderTab"
         />
 </menu>

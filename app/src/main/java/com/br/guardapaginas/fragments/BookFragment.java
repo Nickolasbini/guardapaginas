@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,12 +20,14 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.classes.holders.BookAdapter;
 import com.br.guardapaginas.classes.holders.BookRecycleViewInterface;
 import com.br.guardapaginas.helpers.Functions;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -128,7 +128,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             }
         });
 
-        ImageView saveBookBtn = (ImageView) view.findViewById(R.id.addNewBookBtn);
+        ImageView saveBookBtn = (ImageView) view.findViewById(R.id.addNewGenderBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent saveBookIntent = new Intent(getActivity().getApplicationContext(), SaveBookView.class);
@@ -140,11 +140,10 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
         ImageView goBackBtn = (ImageView) view.findViewById(R.id.goBackBtn);
         goBackBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                // This works but, it would be best to send something as a flag in order to perform the click
-                FragmentManager fragmentManager = getActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.frame_layout, new HomeFragment());
-                fragmentTransaction.commit();
+                BottomNavigationView bottomMenu = MainActivity.bottomNavBar;
+                if(bottomMenu == null)
+                    return;
+                bottomMenu.findViewById(R.id.homeTab).performClick();
             }
         });
 
@@ -165,7 +164,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             }
         });
 
-        bookListScroll = (ScrollView) view.findViewById(R.id.readerListScroll);
+        bookListScroll = (ScrollView) view.findViewById(R.id.genderListScroll);
         bookListScroll.setOnTouchListener(this::onTouch);
         bookListScroll.getViewTreeObserver().addOnScrollChangedListener(this::onScrollChanged);
 
@@ -225,7 +224,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             name = searchInput.getText().toString();
             name = (name.equals("") ? null : name);
         }
-        recyclerView   = currentView.findViewById(R.id.listOfReaders);
+        recyclerView   = currentView.findViewById(R.id.listOfGender);
         listOfMyBooks  = getMyBooks(status, name, page);
         if(listOfMyBooks.size() > 0) {
             noResultLabel.setVisibility(View.GONE);

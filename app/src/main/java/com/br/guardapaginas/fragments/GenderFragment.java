@@ -20,21 +20,24 @@ import android.widget.TextView;
 
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
-import com.br.guardapaginas.classes.User;
-import com.br.guardapaginas.classes.holders.UserAdapter;
-import com.br.guardapaginas.classes.holders.UserRecycleViewInterface;
-import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.SaveGenderView;
 import com.br.guardapaginas.SaveUserView;
+import com.br.guardapaginas.classes.Gender;
+import com.br.guardapaginas.classes.User;
+import com.br.guardapaginas.classes.holders.GenderAdapter;
+import com.br.guardapaginas.classes.holders.GenderRecycleViewInterface;
+import com.br.guardapaginas.classes.holders.UserAdapter;
+import com.br.guardapaginas.helpers.Functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link ReaderFragment#newInstance} factory method to
+ * Use the {@link GenderFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ReaderFragment extends Fragment implements UserRecycleViewInterface {
+public class GenderFragment extends Fragment implements GenderRecycleViewInterface {
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -44,16 +47,17 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
     private View currentView;
-    private ListView listOfReaders;
+    private ListView listOfGenders;
     private EditText searchInput;
     private Spinner statusSpinner;
     private RecyclerView recyclerView;
     private TextView noResultLabel;
-    private List<User> listOfReadersObjects;
+    private List<Gender> listOfGenderObjects;
     Boolean filterOptionsOpen = false;
 
-    public ReaderFragment() {
+    public GenderFragment() {
         // Required empty public constructor
     }
 
@@ -63,11 +67,11 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
      *
      * @param param1 Parameter 1.
      * @param param2 Parameter 2.
-     * @return A new instance of fragment ReaderFragment.
+     * @return A new instance of fragment GenderFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ReaderFragment newInstance(String param1, String param2) {
-        ReaderFragment fragment = new ReaderFragment();
+    public static GenderFragment newInstance(String param1, String param2) {
+        GenderFragment fragment = new GenderFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         args.putString(ARG_PARAM2, param2);
@@ -88,9 +92,9 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        currentView         = inflater.inflate(R.layout.fragment_reader, container, false);
+        currentView = inflater.inflate(R.layout.fragment_gender, container, false);
 
-        getActivity().setTitle("Leitores");
+        getActivity().setTitle("Gêneros");
 
         searchInput         = currentView.findViewById(R.id.searchInput);
         recyclerView        = currentView.findViewById(R.id.listOfGender);
@@ -101,14 +105,13 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
         ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusOption);
         statusSpinner.setAdapter(genderSpinnerAdapter);
 
-
-        fetchReaders(true, false);
+        fetchGenders(true, false);
 
         ImageView searchBtn = currentView.findViewById(R.id.searchBtn);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fetchReaders(true, true);
+                fetchGenders(true, true);
             }
         });
 
@@ -116,7 +119,7 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
         refreshList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                fetchReaders(true, false);
+                fetchGenders(true, false);
                 searchInput.setText("");
             }
         });
@@ -134,10 +137,9 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
         ImageView saveBookBtn = (ImageView) currentView.findViewById(R.id.addNewGenderBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                Intent saveReaderIntent = new Intent(getActivity().getApplicationContext(), SaveUserView.class);
-                saveReaderIntent.putExtra("USER_ID", "0");
-                saveReaderIntent.putExtra("USER_TYPE", "READER");
-                startActivityForResult(saveReaderIntent, 1);
+                Intent saveGenderIntent = new Intent(getActivity().getApplicationContext(), SaveGenderView.class);
+                saveGenderIntent.putExtra("GENDER_ID", "0");
+                startActivityForResult(saveGenderIntent, 1);
             }
         });
 
@@ -160,7 +162,7 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
         return currentView;
     }
 
-    public void fetchReaders(Boolean filterByStatus, Boolean filterByName){
+    public void fetchGenders(Boolean filterByStatus, Boolean filterByName){
         String status = null;
         if(filterByStatus) {
             status  = statusSpinner.getSelectedItem().toString();
@@ -171,23 +173,22 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
             name = searchInput.getText().toString();
             name = (name.equals("") ? null : name);
         }
-        User obj = new User(getContext());
-        listOfReadersObjects = obj.fetchAll(status, name);
-        if(listOfReadersObjects.size() > 0) {
+        Gender obj = new Gender(getContext());
+        listOfGenderObjects = obj.fetchAll(status, name);
+        if(listOfGenderObjects.size() > 0) {
             noResultLabel.setVisibility(View.GONE);
         }else{
             noResultLabel.setVisibility(View.VISIBLE);
         }
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new UserAdapter(getContext(), listOfReadersObjects, this));
+        recyclerView.setAdapter(new GenderAdapter(getContext(), listOfGenderObjects, this));
     }
 
     @Override
     public void onItemClick(int position) {
-        Intent saveReaderIntent = new Intent(getActivity().getApplicationContext(), SaveUserView.class);
-        saveReaderIntent.putExtra("USER_ID", Functions.parseToString(listOfReadersObjects.get(position).getId()));
-        saveReaderIntent.putExtra("USER_TYPE", "READER");
-        startActivityForResult(saveReaderIntent, 1);
+        Intent saveGenderIntent = new Intent(getActivity().getApplicationContext(), SaveGenderView.class);
+        saveGenderIntent.putExtra("GENDER_ID", Functions.parseToString(listOfGenderObjects.get(position).getId()));
+        startActivityForResult(saveGenderIntent, 1);
     }
 
     public void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -196,7 +197,7 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
         switch(requestCode) {
             case 1:
                 if(resultCode == getActivity().RESULT_OK){
-                    fetchReaders(true, false);
+                    fetchGenders(true, false);
                     searchInput.setText("");
                 }
                 break;

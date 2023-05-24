@@ -14,10 +14,12 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.ProfileView;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
 import com.br.guardapaginas.classes.Book;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
 
@@ -85,6 +87,8 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         currentView = inflater.inflate(R.layout.fragment_home, container, false);
 
+        getActivity().setTitle("Guarda Páginas");
+
         userNameLabel              = (TextView) currentView.findViewById(R.id.userNameLabel);
         totalNumberOfBooks         = (TextView) currentView.findViewById(R.id.totalNumberOfBooks);
         openTotalOfBookBtn         = (ImageView) currentView.findViewById(R.id.openTotalOfBookBtn);
@@ -108,7 +112,10 @@ public class HomeFragment extends Fragment {
         openTotalOfBookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                currentView.findViewById(R.id.bookTab).performClick();
+                BottomNavigationView bottomMenu = MainActivity.bottomNavBar;
+                if(bottomMenu == null)
+                    return;
+                bottomMenu.findViewById(R.id.bookTab).performClick();
             }
         });
 

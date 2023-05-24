@@ -27,10 +27,12 @@ import com.br.guardapaginas.classes.Institution;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.fragments.BookFragment;
+import com.br.guardapaginas.fragments.GenderFragment;
 import com.br.guardapaginas.fragments.HomeFragment;
 import com.br.guardapaginas.fragments.ReaderFragment;
 import com.br.guardapaginas.helpers.Functions;
 import com.br.guardapaginas.helpers.SessionManagement;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -42,6 +44,8 @@ public class MainActivity extends AppCompatActivity {
     Button btn;
     ActivityMainBinding binding;
 
+    public static BottomNavigationView bottomNavBar;
+
     @SuppressLint("WrongThread")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +53,8 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
         Functions.setSystemColors(this);
+
+        bottomNavBar = binding.bottomNavigationView2;
 
         replaceFragment(new HomeFragment());
         binding.bottomNavigationView2.setOnItemSelectedListener(item -> {
@@ -61,6 +67,9 @@ public class MainActivity extends AppCompatActivity {
                     break;
                 case R.id.readerTab:
                     replaceFragment(new ReaderFragment());
+                    break;
+                case R.id.genderTab:
+                    replaceFragment(new GenderFragment());
                     break;
             }
             return true;
