@@ -44,8 +44,8 @@ public class SaveUserView extends AppCompatActivity {
         emailInput        = (EditText) findViewById(R.id.emailInput);
         registrationInput = (EditText) findViewById(R.id.registrationInput);
 
-        Button saveUserButton  = (Button) findViewById(R.id.saveUserButton);
-        inactiveUserBtn = (Button) findViewById(R.id.inactiveUserBtn);
+        Button saveUserButton  = (Button) findViewById(R.id.saveBookBorrowButton);
+        inactiveUserBtn = (Button) findViewById(R.id.inactiveBookBorrowBtn);
 
         Intent intent = getIntent();
         userId     = intent.getStringExtra("USER_ID");

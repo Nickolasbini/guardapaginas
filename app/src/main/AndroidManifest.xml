@@ -28,6 +28,20 @@
         android:theme="@style/Theme.Guardapaginas"
         tools:targetApi="31">
         <activity
+            android:name=".SaveBookBorrowingView"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".BookBorrowingView"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".SaveGenderView"
             android:exported="false" />
         <activity

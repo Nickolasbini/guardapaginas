@@ -28,17 +28,17 @@
             android:layout_height="wrap_content"
             android:text="Email"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userName" />
+            app:layout_constraintTop_toBottomOf="@+id/readerInfo" />
 
         <TextView
             android:id="@+id/userRegistration"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Registration"
-            app:layout_constraintTop_toBottomOf="@+id/userName" />
+            app:layout_constraintTop_toBottomOf="@+id/readerInfo" />
 
         <TextView
-            android:id="@+id/userName"
+            android:id="@+id/readerInfo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"

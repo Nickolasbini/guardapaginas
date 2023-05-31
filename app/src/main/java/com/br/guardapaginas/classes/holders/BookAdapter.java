@@ -64,8 +64,8 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView, BookRecycleViewInterface bookRecycleViewInterface) {
             super(itemView);
             bookCover   = itemView.findViewById(R.id.bookCover);
-            bookTitle   = itemView.findViewById(R.id.userName);
-            bookGenders = itemView.findViewById(R.id.bookGenders);
+            bookTitle   = itemView.findViewById(R.id.readerInfo);
+            bookGenders = itemView.findViewById(R.id.bookName);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

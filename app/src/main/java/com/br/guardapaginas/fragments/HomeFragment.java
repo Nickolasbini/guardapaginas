@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.br.guardapaginas.BookBorrowingView;
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.ProfileView;
 import com.br.guardapaginas.R;
@@ -120,6 +121,15 @@ public class HomeFragment extends Fragment {
         });
 
         ImageView openTotalOfBorrowedBookBtn = (ImageView) currentView.findViewById(R.id.openTotalOfBorrowedBookBtn);
+
+        ImageView bookBorrowingButton = (ImageView) currentView.findViewById(R.id.bookBorrowingButton);
+        bookBorrowingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent bookBorrowHome = new Intent(getActivity().getApplicationContext(), BookBorrowingView.class);
+                startActivityForResult(bookBorrowHome, 1);
+            }
+        });
 
         return currentView;
     }

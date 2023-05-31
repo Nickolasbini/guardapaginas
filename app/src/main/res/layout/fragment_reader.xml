@@ -171,7 +171,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="60dp"
-                    app:layout_constraintBottom_toTopOf="@+id/addNewGenderBtn">
+                    app:layout_constraintBottom_toTopOf="@+id/addNewBorrowingBtn">
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/listOfGender"
@@ -180,7 +180,7 @@
                 </ScrollView>
 
                 <ImageView
-                    android:id="@+id/addNewGenderBtn"
+                    android:id="@+id/addNewBorrowingBtn"
                     android:layout_width="65dp"
                     android:layout_height="52dp"
                     android:src="@android:drawable/ic_menu_add"

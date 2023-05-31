@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -111,10 +112,17 @@ public class Functions {
         return format.format(Date.parse(dateString));
     }
 
-    public static String parsePtDateToEn(String ptDate){
-        String[] array        = Functions.explode(ptDate, "-");
-        String enFormatedDate = array[2] + "-" + array[1] + "-" + array[0];
+    public static String parsePtDateToEn(String ptDate, String separator){
+        separator             = (separator == null ? "-" : separator);
+        String[] array        = Functions.explode(ptDate, separator);
+        String enFormatedDate = array[2] + separator + array[1] + separator + array[0];
         return enFormatedDate;
+    }
+
+    public static String parseEnToPt(String enDate){
+        String[] array        = Functions.explode(enDate, "-");
+        String ptFormatedDate = array[2] + "/" + array[1] + "/" + array[0];
+        return ptFormatedDate;
     }
 
     public static String implode(String[] array, String glue){
@@ -246,5 +254,17 @@ public class Functions {
         String jsonString = sb.toString();
         System.out.println("JSON: " + jsonString);
         return new JSONObject(jsonString);
+    }
+
+    public Date parseStringToDate(String dtStart){
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        Date response = null;
+        try {
+            Date date = format.parse(dtStart);
+            response = date;
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return response;
     }
 }

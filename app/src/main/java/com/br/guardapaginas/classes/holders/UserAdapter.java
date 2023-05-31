@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -59,7 +58,7 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.MyViewHolder> 
         public MyViewHolder(@NonNull View itemView, UserRecycleViewInterface userRecycleViewInterface) {
             super(itemView);
             userEmail        = itemView.findViewById(R.id.userEmail);
-            userName         = itemView.findViewById(R.id.userName);
+            userName         = itemView.findViewById(R.id.readerInfo);
             userRegistration = itemView.findViewById(R.id.userRegistration);
 
             itemView.setOnClickListener(new View.OnClickListener() {

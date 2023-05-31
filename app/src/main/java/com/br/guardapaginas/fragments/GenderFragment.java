@@ -21,12 +21,9 @@ import android.widget.TextView;
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveGenderView;
-import com.br.guardapaginas.SaveUserView;
 import com.br.guardapaginas.classes.Gender;
-import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.classes.holders.GenderAdapter;
 import com.br.guardapaginas.classes.holders.GenderRecycleViewInterface;
-import com.br.guardapaginas.classes.holders.UserAdapter;
 import com.br.guardapaginas.helpers.Functions;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
@@ -134,7 +131,7 @@ public class GenderFragment extends Fragment implements GenderRecycleViewInterfa
             }
         });
 
-        ImageView saveBookBtn = (ImageView) currentView.findViewById(R.id.addNewGenderBtn);
+        ImageView saveBookBtn = (ImageView) currentView.findViewById(R.id.addNewBorrowingBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent saveGenderIntent = new Intent(getActivity().getApplicationContext(), SaveGenderView.class);
@@ -163,17 +160,17 @@ public class GenderFragment extends Fragment implements GenderRecycleViewInterfa
     }
 
     public void fetchGenders(Boolean filterByStatus, Boolean filterByName){
+        Gender obj = new Gender(getContext());
         String status = null;
         if(filterByStatus) {
             status  = statusSpinner.getSelectedItem().toString();
-            status = (status == "Ativo" ? User.ACTIVE_READER.toString() : User.INACTIVE_READER.toString());
+            status = (status == "Ativo" ? obj.ACTIVE : obj.INACTIVE);
         }
         String name = null;
         if(filterByName){
             name = searchInput.getText().toString();
             name = (name.equals("") ? null : name);
         }
-        Gender obj = new Gender(getContext());
         listOfGenderObjects = obj.fetchAll(status, name);
         if(listOfGenderObjects.size() > 0) {
             noResultLabel.setVisibility(View.GONE);

@@ -11,36 +11,46 @@
     android:background="#6BD6D6D6"
     android:padding="15dp">
 
-    <ImageView
-        android:id="@+id/bookCover"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        android:layout_marginRight="10dp" />
-
     <TextView
-        android:id="@+id/readerInfo"
+        android:id="@+id/readerName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_toEndOf="@id/bookCover"
         android:textColor="@color/black"
         android:textSize="20dp"
-        tools:text="Name" />
+        tools:text="Petter Parker" />
+
+    <TextView
+        android:id="@+id/readerEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:layout_below="@id/readerName"
+        android:textSize="20dp"
+        tools:text="perter_parker@hotmail.com" />
 
     <TextView
         android:id="@+id/bookName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/readerInfo"
-        android:layout_toEndOf="@id/bookCover"
+        android:layout_below="@id/readerEmail"
         android:textColor="@color/black"
         android:textSize="20dp"
-        tools:text="Fantasy/Drama" />
+        tools:text="The Lord Of the Rings" />
+
+    <TextView
+        android:id="@+id/borrowDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/bookName"
+        android:textColor="@color/black"
+        android:textSize="20dp"
+        tools:text="10-10-2023" />
 
     <LinearLayout
         android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/bookName"
+        android:layout_below="@id/borrowDate"
         android:layout_marginTop="10dp"
         android:background="#DAD8D8" />
 

@@ -5,10 +5,6 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 
-import androidx.room.ColumnInfo;
-import androidx.room.Entity;
-import androidx.room.PrimaryKey;
-
 import com.br.guardapaginas.helpers.Functions;
 
 import java.util.ArrayList;
@@ -27,6 +23,8 @@ public class Gender extends DBHandler{
     public String institution;
 
     public String status;
+
+    public int defaultGender;
 
     public String attributes[] = {"id","name","date","institution"};
 
@@ -71,6 +69,13 @@ public class Gender extends DBHandler{
         this.status = status;
     }
 
+    public int getDefaultGender() {
+        return defaultGender;
+    }
+    public void setDefaultGender(int defaultGender) {
+        this.defaultGender = defaultGender;
+    }
+
     public Integer save(){
         Gender gender = this;
         ContentValues contentValues = new ContentValues();
@@ -80,14 +85,16 @@ public class Gender extends DBHandler{
         }else{
             contentValues.put("institution", gender.getInstitution());
         }
-        System.out.println("A instituição: "+ gender.getInstitution());
         Integer result = 0;
         if(gender.getId() > 0) {
             contentValues.put("createdAt", gender.getCreatedAt());
-            result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(gender.getId())});
+            contentValues.put("status", gender.getStatus());
+            result = Math.toIntExact(getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(gender.getId())}));
         }else{
             contentValues.put("createdAt", Functions.getNowDate());
-            contentValues.put("status", this.ACTIVE);
+            contentValues.put("status", gender.ACTIVE);
+            if(gender.getDefaultGender() > 0)
+                contentValues.put("defaultGender", gender.getDefaultGender());
             result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
         return result;
@@ -99,21 +106,21 @@ public class Gender extends DBHandler{
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
         if(status == null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ? OR institution IS NULL");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution = ? OR institution IS NULL)");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
         }else if(status == null && name != null) {
             String nameFormated = "%" + name + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE name LIKE ? AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE name LIKE ? AND (institution = ? OR institution IS NULL)");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
         }else if(status != null && name != null){
             String nameFormated = "%" + name + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND name LIKE ? AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND name LIKE ? AND (institution = ? OR institution IS NULL)");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, nameFormated, getUserInstitution()});
         }else{
-            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND institution = ?", new String[]{status, getUserInstitution()});
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND (institution = ? OR institution IS NULL)", new String[]{status, getUserInstitution()});
         }
         cursor.moveToFirst();
         Gender gender;
@@ -123,6 +130,8 @@ public class Gender extends DBHandler{
             gender.setName(cursor.getString(cursor.getColumnIndex("name")));
             gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
             gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            gender.setDefaultGender(cursor.getInt(cursor.getColumnIndex("defaultGender")));
+            System.out.println("Gender: "+gender.parseObjToString());
             list.add(gender);
             cursor.moveToNext();
         }
@@ -141,7 +150,8 @@ public class Gender extends DBHandler{
         gender.setId(cursor.getInt(cursor.getColumnIndex("id")));
         gender.setName(cursor.getString(cursor.getColumnIndex("name")));
         gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
-        gender.setName(cursor.getString(cursor.getColumnIndex("status")));
+        gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+        gender.setDefaultGender(cursor.getInt(cursor.getColumnIndex("defaultGender")));
         return gender;
     }
 
@@ -159,6 +169,7 @@ public class Gender extends DBHandler{
             gender.setName(cursor.getString(cursor.getColumnIndex("name")));
             gender.setCreatedAt(cursor.getString(cursor.getColumnIndex("createdAt")));
             gender.setStatus(cursor.getString(cursor.getColumnIndex("status")));
+            gender.setDefaultGender(cursor.getInt(cursor.getColumnIndex("defaultGender")));
             list.add(gender);
             cursor.moveToNext();
         }
@@ -202,6 +213,18 @@ public class Gender extends DBHandler{
         return list;
     }
 
+    public Boolean inactiveActiveGender(){
+        if(this.getId() < 1)
+            return false;
+        String nextStatus = (this.getStatus().equals(this.ACTIVE) ? this.INACTIVE : this.ACTIVE);
+        if(nextStatus == null)
+            return false;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("status", nextStatus);
+        Integer result = getDBConnection().update(getTableName(), contentValues, "id = ?", new String[]{Integer.toString(this.getId())});
+        return (result > 0 ? true : false);
+    }
+
     public String parseToString(List<Gender> listOfGenders){
         if(listOfGenders.size() < 1)
             return null;
@@ -211,6 +234,15 @@ public class Gender extends DBHandler{
             result += "Id: "+obj.getId()+" | Name: "+obj.getName()+" | CreatedAt: "+obj.getCreatedAt()+" | Status: "+obj.getStatus();
             result += "-----\n";
         }
+        return result;
+    }
+
+    public String parseObjToString(){
+        Gender obj = this;
+        String result = "";
+        result += "-----";
+        result += "Id: "+obj.getId()+" | Name: "+obj.getName()+" | CreatedAt: "+obj.getCreatedAt()+" | Status: "+obj.getStatus()+ " | DefaultGender: "+obj.getDefaultGender();
+        result += "-----\n";
         return result;
     }
 }

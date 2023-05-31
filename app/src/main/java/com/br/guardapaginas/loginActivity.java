@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.Gender;
 import com.br.guardapaginas.classes.Institution;
 import com.br.guardapaginas.classes.User;
@@ -66,7 +67,6 @@ public class loginActivity extends AppCompatActivity {
     @Override
     protected void onStart(){
         super.onStart();
-        System.out.println("Bora checar a sessão");
         SessionManagement sessionManagement = new SessionManagement(this);
         if(sessionManagement.isSessionActive())
             moveToMainActivity();
@@ -89,7 +89,6 @@ public class loginActivity extends AppCompatActivity {
             addMessageToToast("Email inválido");
             return false;
         }
-        System.out.println("Suas credenciais:  "+email+ " | Senha: "+password + " - MD5 "+Functions.md5(password)+"  |  "+user.getPassword());
         if(!user.getPassword().equals(Functions.md5(password))){
             addMessageToToast("Email ou senha não conferem");
             return false;
@@ -132,14 +131,14 @@ public class loginActivity extends AppCompatActivity {
             adminObj.saveAdmin();
         }
 
-        Gender genderObj = new Gender(getApplicationContext());
         String[] defaultGender = {"drama", "romance", "terror", "misterio", "aventura", "ação"};
         for(Integer i = 0; i < defaultGender.length; i++){
             Gender obj = new Gender(getApplicationContext());
             List<Gender> result = obj.fetchByName(defaultGender[i]);
-            if(result.size() != 0)
+            if(result.size() > 0)
                 continue;
             obj.setName(defaultGender[i]);
+            obj.setDefaultGender(1);
             obj.save();
         }
     }

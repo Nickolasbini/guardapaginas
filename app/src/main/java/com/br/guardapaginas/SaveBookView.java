@@ -89,8 +89,8 @@ public class SaveBookView extends AppCompatActivity {
         String idOfBook = intent.getStringExtra("BOOK_ID");
         idOfCurrentBook = Functions.parseToInteger(idOfBook);
         Button getByCode       = (Button) findViewById(R.id.fetchBookByCode);
-        Button saveBookButton  = (Button) findViewById(R.id.saveUserButton);
-        inactiveUserBtn        = (Button) findViewById(R.id.inactiveUserBtn);
+        Button saveBookButton  = (Button) findViewById(R.id.saveBookBorrowButton);
+        inactiveUserBtn        = (Button) findViewById(R.id.inactiveBookBorrowBtn);
         if(idOfCurrentBook > 0){
             setTitle("Editar Livro");
             getByCode.setVisibility(View.GONE);
@@ -152,7 +152,7 @@ public class SaveBookView extends AppCompatActivity {
             }
         });
 
-        Button saveButton = (Button) findViewById(R.id.saveUserButton);
+        Button saveButton = (Button) findViewById(R.id.saveBookBorrowButton);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

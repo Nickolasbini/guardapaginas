@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.br.guardapaginas.classes.Gender;
@@ -31,8 +32,8 @@ public class SaveGenderView extends AppCompatActivity {
         setContentView(R.layout.activity_save_gender_view);
         Functions.setSystemColors(this);
 
-        saveGenderButton     = (Button) findViewById(R.id.saveUserButton);
-        inactiveActiveGender = (Button) findViewById(R.id.inactiveUserBtn);
+        saveGenderButton     = (Button) findViewById(R.id.saveBookBorrowButton);
+        inactiveActiveGender = (Button) findViewById(R.id.inactiveBookBorrowBtn);
         nameInput            = (EditText) findViewById(R.id.nameInput);
 
         Intent intent = getIntent();
@@ -67,10 +68,36 @@ public class SaveGenderView extends AppCompatActivity {
             }
         });
 
+        inactiveActiveGender.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(genderObj == null || genderObj.getId() < 1){
+                    addMessageToToast("Ação não permitida");
+                    return;
+                }
+                Boolean result = genderObj.inactiveActiveGender();
+                if(!result){
+                    addMessageToToast("Um problema ocorreu, tente novamente");
+                    return;
+                }
+                addMessageToToast("Status do gênero atualizado");
+                fillFields();
+            }
+        });
+
+        ImageView goBackBtn = (ImageView) findViewById(R.id.goBackBtn);
+        goBackBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent();
+                setResult(Activity.RESULT_OK, i);
+                finishActivity(1);
+                finish();
+            }
+        });
     }
 
     public void addMessageToToast(String message){
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     public void fillFields(){
@@ -84,8 +111,14 @@ public class SaveGenderView extends AppCompatActivity {
             }
             genderObj = obj;
             nameInput.setText(genderObj.getName());
-
-            String titleToSetOnStatusButton = (genderObj.getStatus().equals(genderObj.ACTIVE) ? "Inativar" : "Ativar");
+            String titleToSetOnStatusButton = "";
+            if(obj.getDefaultGender() != 1){
+                titleToSetOnStatusButton = (genderObj.getStatus().equals(genderObj.ACTIVE) ? "Inativar" : "Ativar");
+                System.out.println("Diferente de Null");
+            }else{
+                addMessageToToast("Gênero padrão. Não pode ser alterado");
+                finish();
+            }
             inactiveActiveGender.setText(titleToSetOnStatusButton);
         }
     }

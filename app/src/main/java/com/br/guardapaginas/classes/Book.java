@@ -161,16 +161,16 @@ public class Book extends DBHandler{
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
         if(status == null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (institution IS NULL OR institution = ?)");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (institution IS NULL OR institution = ?) ORDER BY title");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && name == null) {
-            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution IS NULL OR institution = ?)", new String[]{status, getUserInstitution()});
+            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution IS NULL OR institution = ?) ORDER BY title", new String[]{status, getUserInstitution()});
         }else if(status == null && name != null){
             String likeParam = "%"+name+"%";
-            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE title LIKE ? AND (institution IS NULL OR institution = ?)", new String[]{likeParam, getUserInstitution()});
+            cursor = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " WHERE title LIKE ? AND (institution IS NULL OR institution = ?) ORDER BY title", new String[]{likeParam, getUserInstitution()});
         }else{
             String likeParam = "%"+name+"%";
-            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND title LIKE ? AND (institution IS NULL OR institution = ?)", new String[]{status, likeParam, getUserInstitution()});
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND title LIKE ? AND (institution IS NULL OR institution = ?) ORDER BY title", new String[]{status, likeParam, getUserInstitution()});
         }
         cursor.moveToFirst();
         Book book;

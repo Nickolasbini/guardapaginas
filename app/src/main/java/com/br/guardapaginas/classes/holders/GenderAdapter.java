@@ -57,7 +57,7 @@ public class GenderAdapter extends RecyclerView.Adapter<GenderAdapter.MyViewHold
         public MyViewHolder(@NonNull View itemView, GenderRecycleViewInterface genderRecycleViewInterface) {
             super(itemView);
             genderId   = itemView.findViewById(R.id.userId);
-            genderName = itemView.findViewById(R.id.userName);
+            genderName = itemView.findViewById(R.id.readerInfo);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {

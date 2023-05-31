@@ -63,7 +63,7 @@
         android:layout_marginTop="60dp"
         android:layout_marginBottom="150dp"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="@id/saveUserButton"
+        app:layout_constraintBottom_toBottomOf="@id/saveBookBorrowButton"
         app:layout_constraintTop_toBottomOf="@+id/topMenuOptions">
 
         <LinearLayout
@@ -350,7 +350,7 @@
         tools:layout_editor_absoluteY="546dp"></LinearLayout>
 
     <Button
-        android:id="@+id/saveUserButton"
+        android:id="@+id/saveBookBorrowButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
@@ -368,16 +368,16 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveUserButton"
+        app:layout_constraintTop_toBottomOf="@+id/saveBookBorrowButton"
         tools:layout_editor_absoluteY="669dp" />
 
     <Button
-        android:id="@+id/inactiveUserBtn"
+        android:id="@+id/inactiveBookBorrowBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Inativar"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/saveUserButton" />
+        app:layout_constraintTop_toBottomOf="@+id/saveBookBorrowButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

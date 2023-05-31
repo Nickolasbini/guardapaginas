@@ -131,7 +131,7 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
             }
         });
 
-        ImageView saveBookBtn = (ImageView) currentView.findViewById(R.id.addNewGenderBtn);
+        ImageView saveBookBtn = (ImageView) currentView.findViewById(R.id.addNewBorrowingBtn);
         saveBookBtn.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 Intent saveReaderIntent = new Intent(getActivity().getApplicationContext(), SaveUserView.class);

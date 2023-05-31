@@ -132,21 +132,21 @@ public class User extends DBHandler{
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
         if(status == null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ? ORDER BY name");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ? ORDER BY name");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
         }else if(status == null && name != null) {
             String nameFormated = "%" + name + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ? ORDER BY name");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
         }else if(status != null && name != null){
             String nameFormated = "%" + name + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ?");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ? ORDER BY name");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
         }else{
-            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND institution = ?", new String[]{status, getUserInstitution()});
+            cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND institution = ? ORDER BY name", new String[]{status, getUserInstitution()});
         }
         cursor.moveToFirst();
         User user;
