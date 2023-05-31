@@ -75,6 +75,8 @@ public class BookBorrowing extends DBHandler{
         return realDelivery;
     }
     public void setRealDelivery(String realDelivery) {
+        if(realDelivery.length() < 1)
+            realDelivery = null;
         this.realDelivery = realDelivery;
     }
 
@@ -88,10 +90,11 @@ public class BookBorrowing extends DBHandler{
     @SuppressLint("Range")
     public List<String> getBookBorrowData(){
         List<String> data = new ArrayList<>(4);
-        String query      = "SELECT * FROM "+getTableName()+" ";
-        Cursor cursor     = getDBConnection().rawQuery(query, null);
+        String query      = "SELECT u.name as readerName, u.email as readerEmail, b.title as bookName, bb.lendDate as borrowDate FROM "+getTableName()+" as bb LEFT JOIN users as u on u.id = bb.reader LEFT JOIN books as b on b.id = bb.book WHERE bb.id = ?";
+        Cursor cursor     = getDBConnection().rawQuery(query, new String[]{Functions.parseToString(this.getId())});
         if(cursor.getCount() < 1)
             return data;
+        cursor.moveToNext();
         data.add(cursor.getString(cursor.getColumnIndex("readerName")));
         data.add(cursor.getString(cursor.getColumnIndex("readerEmail")));
         data.add(cursor.getString(cursor.getColumnIndex("bookName")));
@@ -131,8 +134,8 @@ public class BookBorrowing extends DBHandler{
                 names += "@!@" + bookData.get(count).getTitle();
             }
         }
-        data.add(Functions.explode(ids, "@!@"));
-        data.add(Functions.explode(names, "@!@"));
+        data.add(!ids.equals("")   ? Functions.explode(ids, "@!@")   : null);
+        data.add(!names.equals("") ? Functions.explode(names, "@!@") : null);
 
         ids   = "";
         names = "";
@@ -147,8 +150,8 @@ public class BookBorrowing extends DBHandler{
                 names += "@!@" + readerData.get(count).getName();
             }
         }
-        data.add(Functions.explode(ids, "@!@"));
-        data.add(Functions.explode(names, "@!@"));
+        data.add(!ids.equals("")   ? Functions.explode(ids, "@!@")   : null);
+        data.add(!names.equals("") ? Functions.explode(names, "@!@") : null);
 
         return data;
     }
@@ -168,6 +171,7 @@ public class BookBorrowing extends DBHandler{
     public String calculateDelayedDays(){
         String data = "";
         String expectedDateString = Functions.parsePtDateToEn(this.getExpectedDelivery(), "/");
+        System.out.println("Data: "+expectedDateString);
 //        Date expectedDate = Functions.parseStringToDate();
         return data;
     }
@@ -196,28 +200,29 @@ public class BookBorrowing extends DBHandler{
     }
 
     @SuppressLint("Range")
-    public List<User> fetchAll(String status, String date) {
+    public List<BookBorrowing> fetchAll(String status, String date) {
         ArrayList list = new ArrayList();
         StringBuilder stringBuilderQuery = new StringBuilder();
         Cursor cursor = null;
         if(status == null && date == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ? ORDER BY name");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ?");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && date == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ? ORDER BY lendDate");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
         }else if(status == null && date != null) {
             String nameFormated = "%" + date + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ? ORDER BY name");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ?");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
         }else if(status != null && date != null){
             String nameFormated = "%" + date + "%";
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (name LIKE ? OR email LIKE ? OR cpf like ? OR registration LIKE ?) AND institution = ? ORDER BY name");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND institution = ?");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, nameFormated, nameFormated, nameFormated, nameFormated, getUserInstitution()});
         }else{
             cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+ " WHERE status = ? AND institution = ? ORDER BY name", new String[]{status, getUserInstitution()});
         }
         cursor.moveToFirst();
+        System.out.println("Tamanho: "+cursor.getCount());
         while(!cursor.isAfterLast()){
             BookBorrowing bookBorrowing = new BookBorrowing(currentContext);
             bookBorrowing.setId(cursor.getInt(cursor.getColumnIndex("id")));

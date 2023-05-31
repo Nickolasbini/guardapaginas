@@ -256,7 +256,7 @@ public class Functions {
         return new JSONObject(jsonString);
     }
 
-    public Date parseStringToDate(String dtStart){
+    public static Date parseStringToDate(String dtStart){
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         Date response = null;
         try {
@@ -265,6 +265,22 @@ public class Functions {
         } catch (ParseException e) {
             e.printStackTrace();
         }
+        return response;
+    }
+
+    public static String addDaysToDate(Integer daysToAdd, String dateString){
+        String response = dateString;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(dateString));
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+        c.add(Calendar.DATE, daysToAdd);
+        sdf = new SimpleDateFormat("dd/MM/yyyy");
+        Date resultdate = new Date(c.getTimeInMillis());
+        response = sdf.format(resultdate);
         return response;
     }
 }

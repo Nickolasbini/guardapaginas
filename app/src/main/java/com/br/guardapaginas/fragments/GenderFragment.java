@@ -94,7 +94,7 @@ public class GenderFragment extends Fragment implements GenderRecycleViewInterfa
         getActivity().setTitle("Gêneros");
 
         searchInput         = currentView.findViewById(R.id.searchInput);
-        recyclerView        = currentView.findViewById(R.id.listOfGender);
+        recyclerView        = currentView.findViewById(R.id.listOfBookBorrowings);
         noResultLabel       = currentView.findViewById(R.id.noResultLabel);
 
         String[] statusOption = {"Ativo", "inativo"};

@@ -2,6 +2,7 @@ package com.br.guardapaginas;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,6 +43,7 @@ public class SaveBookBorrowingView extends AppCompatActivity {
     TextView      realDeliveryDateLabel;
     TextView      realDeliveryDateInput;
     TextView      delayedDaysInput;
+    TextView      delayedDaysLabel;
 
     String[]      booksId;
     String[]      booksName;
@@ -92,20 +95,36 @@ public class SaveBookBorrowingView extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 feedObject();
-                if(bookBorrowingObj.save()){
+                if(bookBorrowingObj.save() > 0){
                     String message = (numberOfId > 0 ? "Empréstimo atualizado" : "Empréstimo cadastrado");
                     addMessageToToast(message);
+                    Intent i = new Intent();
+                    setResult(Activity.RESULT_OK, i);
+                    finishActivity(1);
+                    finish();
                 }else{
                     addMessageToToast("Um problema ocorreu, tente novamente");
                 }
+            }
+        });
+
+        ImageView goBackBtn = (ImageView) findViewById(R.id.goBackBtn);
+        goBackBtn.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent i = new Intent();
+                setResult(Activity.RESULT_OK, i);
+                finishActivity(1);
+                finish();
             }
         });
     }
 
     private void updateDateOfRelease(){
         String myFormat="dd/MM/yyyy";
-        SimpleDateFormat dateFormat=new SimpleDateFormat(myFormat);
+        SimpleDateFormat dateFormat = new SimpleDateFormat(myFormat);
         lendDateInput.setText(dateFormat.format(myCalendar.getTime()));
+        SimpleDateFormat enDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        expectedDeliveryDateInput.setText(Functions.addDaysToDate(15, enDateFormat.format(myCalendar.getTime())));
     }
 
     public void initTags(){
@@ -116,24 +135,39 @@ public class SaveBookBorrowingView extends AppCompatActivity {
         lendDateInput            = (EditText) findViewById(R.id.lendDateInput);
         expectedDeliveryDateInput= (TextView) findViewById(R.id.expectedDeliveryDateInput);
         realDeliveryDateLabel    = (TextView) findViewById(R.id.realDeliveryDateLabel);
-        realDeliveryDateInput    = (TextView) findViewById(R.id.releaseDateInput);
+        realDeliveryDateInput    = (TextView) findViewById(R.id.realDeliveryDateInput);
+        delayedDaysLabel         = (TextView) findViewById(R.id.delayedDaysLabel);
         delayedDaysInput         = (TextView) findViewById(R.id.delayedDaysInput);
         bookBorrowingObj         = new BookBorrowing(getApplicationContext());
 
-        fillSpinners();
+        if(!fillSpinners())
+            finish();
     }
 
     public void feedObject(){
-        bookBorrowingObj.setBook((Integer) bookSelect.getSelectedItem());
-        bookBorrowingObj.setReader((Integer) readerSelect.getSelectedItem());
+        Integer positionBook = bookSelect.getSelectedItemPosition();
+        bookBorrowingObj.setBook(Functions.parseToInteger(booksId[positionBook]));
+        Integer positionReader = readerSelect.getSelectedItemPosition();
+        bookBorrowingObj.setReader(Functions.parseToInteger(readersId[positionReader]));
         bookBorrowingObj.setLendDate(lendDateInput.getText().toString());
+        bookBorrowingObj.setExpectedDelivery(expectedDeliveryDateInput.getText().toString());
+        bookBorrowingObj.setRealDelivery(realDeliveryDateInput.getText().toString());
     }
 
     public void fillInputs(){
         if(bookBorrowingObj.getId() < 1){
             lendDateInput.setText(Functions.parseEnToPt(Functions.getNowDate()));
+            expectedDeliveryDateInput.setText(Functions.addDaysToDate(15, Functions.getNowDate()));
+            realDeliveryDateLabel.setVisibility(View.INVISIBLE);
+            realDeliveryDateInput.setVisibility(View.INVISIBLE);
+            delayedDaysLabel.setVisibility(View.INVISIBLE);
+            delayedDaysInput.setVisibility(View.INVISIBLE);
             return;
         }
+        realDeliveryDateLabel.setVisibility(View.VISIBLE);
+        realDeliveryDateInput.setVisibility(View.VISIBLE);
+        delayedDaysLabel.setVisibility(View.VISIBLE);
+        delayedDaysInput.setVisibility(View.VISIBLE);
         Integer myBookIndex = 0;
         String  myBookId    = Functions.parseToString(bookBorrowingObj.getBook());
         for(Integer i = 0 ; i < booksId.length; i++) {
@@ -169,18 +203,31 @@ public class SaveBookBorrowingView extends AppCompatActivity {
         delayedDaysInput.setText(bookBorrowingObj.calculateDelayedDays());
     }
 
-    public void fillSpinners(){
+    public Boolean fillSpinners(){
         List<String[]> data = bookBorrowingObj.getDataForSpinner();
         booksId     = data.get(0);
         booksName   = data.get(1);
         readersId   = data.get(2);
         readersName = data.get(3);
 
+        if(booksId == null){
+            addMessageToToast("Nenhum livro cadastrado");
+            finish();
+            return false;
+        }
+        if(readersId == null){
+            addMessageToToast("Nenhum leitor cadastrado");
+            finish();
+            return false;
+        }
+
         ArrayAdapter<String> bookSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, booksName);
         bookSelect.setAdapter(bookSpinnerAdapter);
 
         ArrayAdapter<String> readerSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, readersName);
         readerSelect.setAdapter(readerSpinnerAdapter);
+
+        return true;
     }
 
     public void addMessageToToast(String message){

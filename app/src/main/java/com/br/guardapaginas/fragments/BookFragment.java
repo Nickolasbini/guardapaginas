@@ -224,7 +224,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             name = searchInput.getText().toString();
             name = (name.equals("") ? null : name);
         }
-        recyclerView   = currentView.findViewById(R.id.listOfGender);
+        recyclerView   = currentView.findViewById(R.id.listOfBookBorrowings);
         listOfMyBooks  = getMyBooks(status, name, page);
         if(listOfMyBooks.size() > 0) {
             noResultLabel.setVisibility(View.GONE);
