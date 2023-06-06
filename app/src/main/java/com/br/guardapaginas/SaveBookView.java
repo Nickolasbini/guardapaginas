@@ -484,6 +484,12 @@ public class SaveBookView extends AppCompatActivity {
         protected void onPostExecute(String json) {
             // Aqui você pode manipular o JSON retornado da API
             // por exemplo, atualizar a interface do usuário com os dados obtidos
+            try {
+                JSONObject obj = new JSONObject(json);
+                System.out.println("My App" + obj.toString());
+            } catch (Throwable t) {
+                System.out.println("Could not parse malformed JSON: \"" + json + "\"");
+            }
         }
     }
 }
