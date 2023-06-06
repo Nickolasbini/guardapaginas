@@ -66,4 +66,11 @@ dependencies {
     implementation "androidx.cardview:cardview:1.0.0"
 
     implementation 'com.journeyapps:zxing-android-embedded:4.3.0'
+
+    // define a BOM and its version
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+
+    // define any required OkHttp artifacts without version
+    implementation("com.squareup.okhttp3:okhttp")
+    implementation("com.squareup.okhttp3:logging-interceptor")
 }

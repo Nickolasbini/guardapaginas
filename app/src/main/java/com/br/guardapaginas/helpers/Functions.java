@@ -236,15 +236,20 @@ public class Functions {
     }
 
     public static JSONObject getJSONObjectFromURL(String urlString) throws IOException, JSONException {
+        System.out.println("From URL: "+urlString);
         HttpURLConnection urlConnection = null;
         URL url = new URL(urlString);
+        System.out.println("Result URL: "+url);
         urlConnection = (HttpURLConnection) url.openConnection();
         urlConnection.setRequestMethod("GET");
         urlConnection.setReadTimeout(10000 /* milliseconds */ );
         urlConnection.setConnectTimeout(15000 /* milliseconds */ );
         urlConnection.setDoOutput(true);
+        System.out.println("Vai conectar: "+urlConnection);
         urlConnection.connect();
+        System.out.println("Connectado: "+urlConnection);
         BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()));
+        System.out.println("Result: "+br);
         StringBuilder sb = new StringBuilder();
         String line;
         while ((line = br.readLine()) != null) {
