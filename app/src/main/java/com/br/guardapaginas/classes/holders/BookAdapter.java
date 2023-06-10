@@ -41,9 +41,9 @@ public class BookAdapter extends RecyclerView.Adapter<BookAdapter.MyViewHolder> 
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
         holder.bookTitle.setText(bookItems.get(position).getTitle());
         holder.bookGenders.setText(bookItems.get(position).getGendersName());
+        System.out.println("Imagem: "+bookItems.get(position).getBookCover());
         if(bookItems.get(position).getBookCover() != null)
             holder.bookCover.setImageBitmap(Functions.parseByteArrayToBitMap(bookItems.get(position).getBookCover()));
-        Book obj = bookItems.get(position);
     }
 
     @Override

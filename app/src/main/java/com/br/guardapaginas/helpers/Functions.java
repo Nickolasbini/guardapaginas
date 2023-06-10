@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
+import android.text.TextUtils;
 import android.view.View;
 
 import androidx.appcompat.app.ActionBar;
@@ -16,10 +17,15 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -28,6 +34,7 @@ import java.util.Date;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.InputMismatchException;
+import java.util.List;
 
 public class Functions {
     public static Date now(){
@@ -43,6 +50,15 @@ public class Functions {
             dataToReturn += "]";
         }
         return dataToReturn;
+    }
+
+    public static String urlEncode(String val){
+        try {
+            return URLEncoder.encode(val, String.valueOf(StandardCharsets.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+            return val.replace(" ", "+");
+        }
     }
 
     public static String ucfirst(String val){
@@ -141,6 +157,11 @@ public class Functions {
             }
         }
         return val;
+    }
+
+    public static String implodeListToString(List list, String delimiter){
+        delimiter = (delimiter == null ? "," : delimiter);
+        return TextUtils.join(delimiter, list);
     }
 
     public static String[] explode(String value, String glue){

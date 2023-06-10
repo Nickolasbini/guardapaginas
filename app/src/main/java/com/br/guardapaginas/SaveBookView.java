@@ -2,6 +2,7 @@ package com.br.guardapaginas;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
@@ -16,6 +17,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.provider.MediaStore;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -33,6 +35,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.br.guardapaginas.classes.Book;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.views.APIListOfBooks;
 import com.br.guardapaginas.views.CaptureScren;
 import com.br.guardapaginas.views.GenderSelection;
 import com.journeyapps.barcodescanner.ScanContract;
@@ -52,10 +55,6 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
-
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
-import okhttp3.Response;
 
 public class SaveBookView extends AppCompatActivity {
     ActivityMainBinding binding;
@@ -135,12 +134,7 @@ public class SaveBookView extends AppCompatActivity {
         bookCoverButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Selecione uma imagem"), SELECT_IMAGE);
-                Intent i = new Intent(Intent.ACTION_PICK,
-                        android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+                Intent i = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                 final int ACTIVITY_SELECT_IMAGE = 100;
                 startActivityForResult(i, ACTIVITY_SELECT_IMAGE);
             }
@@ -228,7 +222,8 @@ public class SaveBookView extends AppCompatActivity {
         getByCode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                openCameraForReadingISBN();
+                Intent i = new Intent(getApplicationContext(), APIListOfBooks.class);
+                startActivityForResult(i, 29);
             }
         });
     }
@@ -366,8 +361,7 @@ public class SaveBookView extends AppCompatActivity {
                     yourSelectedImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
                     byte[] imageInByte = stream.toByteArray();
                     long lengthbmp = imageInByte.length;
-                    if (lengthbmp >= 65535) {
-                        System.out.println("Size  " + lengthbmp);
+                    if (lengthbmp >= 100000) {
                         addMessageToToast("Imagem muito grande!");
                         return;
                     }
@@ -392,6 +386,38 @@ public class SaveBookView extends AppCompatActivity {
                     }
                     ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, arrayToUse);
                     genderSelect.setAdapter(genderSpinnerAdapter);
+                }
+                break;
+            case 29:
+                // Book api return
+                if(data != null){
+                    String selectedObjectJSON = data.getStringExtra("SELECTED_BOOK_FROM_API");
+                    if(selectedObjectJSON == null || selectedObjectJSON.equals("")){
+                        addMessageToToast("Um problema ocorreu, tente novamente");
+                        return;
+                    }
+                    try {
+                        JSONObject jsonObject = new JSONObject(selectedObjectJSON);
+                        bookTitle.setText(jsonObject.getString("title"));
+                        bookSynopsis.setText(jsonObject.getString("synopsis"));
+                        bookAuthor.setText(jsonObject.getString("author"));
+                        bookEditorName.setText(jsonObject.getString("editorName"));
+                        bookNumberOfPages.setText(jsonObject.getString("numberOfPages"));
+                        bookObject.setBookLanguage(jsonObject.getString("bookLanguage"));
+                        bookLanguage.setSelection(bookObject.getLanguagePosition());
+                        bookObject.setReleaseDate(jsonObject.getString("releaseDate"));
+                        if(bookObject.getReleaseDate() != null)
+                            bookObject.setReleaseDate(Functions.parseEnToPt(bookObject.getReleaseDate()));
+                        bookReleaseDate.setText(bookObject.getFormatedReleasedDate());
+                        bookCoverByte   = Base64.decode(jsonObject.getString("bookCover"), Base64.NO_WRAP);
+                        bookCoverBitMap = Functions.parseByteArrayToBitMap(bookCoverByte);
+                        bookCover.setImageBitmap(bookCoverBitMap);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                        addMessageToToast("Um problema ocorreu, tente novamente");
+                    }
+                }else{
+                    addMessageToToast("Um problema ocorreu, tente novamente");
                 }
                 break;
         }
@@ -429,67 +455,5 @@ public class SaveBookView extends AppCompatActivity {
 
     public void addMessageToToast(String message) {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
-    }
-
-    private void openCameraForReadingISBN() {
-        ScanOptions scanOptions = new ScanOptions();
-        scanOptions.setPrompt("Volume + liga o flash");
-        scanOptions.setBeepEnabled(true);
-        scanOptions.setOrientationLocked(true);
-        scanOptions.setCaptureActivity(CaptureScren.class);
-        barLauncher.launch(scanOptions);
-    }
-
-    ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result -> {
-        if (result.getContents() != null) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Resultado");
-            builder.setMessage(result.getContents());
-            builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialogInterface, int which) {
-                    String codeFound = result.getContents();
-                    new ApiRequestTask().execute("https://www.googleapis.com/books/v1/volumes?q="+codeFound);
-                }
-            }).show();
-        }
-    });
-
-    private class ApiRequestTask extends AsyncTask<String, Void, String> {
-
-        @Override
-        protected String doInBackground(String... params) {
-            String apiUrl = params[0];
-            StringBuilder json = new StringBuilder();
-            try {
-                URL url = new URL(apiUrl);
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                int responseCode = connection.getResponseCode();
-                if (responseCode == HttpURLConnection.HTTP_OK) {
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-                    String line;
-                    while ((line = reader.readLine()) != null) {
-                        json.append(line);
-                    }
-                    reader.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return json.toString();
-        }
-
-        @Override
-        protected void onPostExecute(String json) {
-            // Aqui você pode manipular o JSON retornado da API
-            // por exemplo, atualizar a interface do usuário com os dados obtidos
-            try {
-                JSONObject obj = new JSONObject(json);
-                System.out.println("My App" + obj.toString());
-            } catch (Throwable t) {
-                System.out.println("Could not parse malformed JSON: \"" + json + "\"");
-            }
-        }
     }
 }

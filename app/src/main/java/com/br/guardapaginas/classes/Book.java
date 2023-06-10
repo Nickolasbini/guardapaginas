@@ -5,8 +5,14 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.util.Base64;
 
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.views.APIListOfBooks;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -39,6 +45,8 @@ public class Book extends DBHandler{
     private String numberOfPages;
 
     private byte[] bookCover;
+
+    public String genderStringArray;
 
     public int getId() {
         return id;
@@ -103,7 +111,13 @@ public class Book extends DBHandler{
         return bookLanguage;
     }
     public void setBookLanguage(String bookLanguage) {
-        this.bookLanguage = bookLanguage;
+        String[] avaliableLanguages = {"pt", "en", "es"};
+        Boolean isSupportedLanguage = false;
+        for(Integer i = 0; i < avaliableLanguages.length; i++){
+            if(avaliableLanguages[i].equals(bookLanguage))
+                isSupportedLanguage = true;
+        }
+        this.bookLanguage = (isSupportedLanguage ? bookLanguage : "pt");
     }
 
     public String getNumberOfPages() {
@@ -118,6 +132,13 @@ public class Book extends DBHandler{
     }
     public void setBookCover(byte[] bookCover) {
         this.bookCover = bookCover;
+    }
+
+    public String getGenderStringArray() {
+        return genderStringArray;
+    }
+    public void setGenderStringArray(String genderStringArray) {
+        this.genderStringArray = genderStringArray;
     }
 
     public String attributes[] = {"id","title","synopsis","author","releaseDate","editorName","status","gender","bookLanguage","numberOfPages"};
@@ -255,15 +276,20 @@ public class Book extends DBHandler{
         return book;
     }
 
-    public String parseToString(List<Book> listOfBooks){
+    public String parseListToString(List<Book> listOfBooks){
         if(listOfBooks.size() < 1)
             return null;
         String result = "";
         for(Book obj : listOfBooks){
-            result += "-----";
-            result += "Id: "+obj.getId()+" | Title: "+obj.getTitle()+" | Synopsis: "+obj.getSynopsis()+" | Author: "+obj.getAuthor();
-            result += "-----\n";
+            result += parseToString(obj);
         }
+        return result;
+    }
+
+    public String parseToString(Book obj){
+        String result = "-----";
+        result += "Id: "+obj.getId()+" | Title: "+obj.getTitle()+" | Synopsis: "+obj.getSynopsis()+" | Author: "+obj.getAuthor() + " | Cover: "+obj.getBookCover() + " | NumberOfPages: "+obj.getNumberOfPages() + " | ReleaseDate: "+obj.getReleaseDate();
+        result += "-----\n";
         return result;
     }
 
@@ -320,6 +346,19 @@ public class Book extends DBHandler{
     public Integer getLanguagePosition(){
         String[] languageItems = this.getAvaliableLanguages();
         String language        = this.getBookLanguage();
+        if(language == null)
+            return 0;
+        switch(language){
+            case "pt":
+                language = "Português";
+            break;
+            case "en":
+                language = "Inglês";
+            break;
+            case "es":
+                language = "Espanhol";
+            break;
+        }
         Integer position       = null;
         for(Integer i = 0; i < languageItems.length; i++){
             if(languageItems[i].equals(language)) {
@@ -331,6 +370,7 @@ public class Book extends DBHandler{
     }
 
     public String getFormatedReleasedDate(){
+        System.out.println("A data: "+this.getReleaseDate());
         if(this.getReleaseDate() == null)
             return "";
         return this.getReleaseDate();
@@ -374,5 +414,24 @@ public class Book extends DBHandler{
     public String getNextStatus(){
         String status = this.getStatus();
         return (status.equals(ACTIVE) ? INACTIVE : ACTIVE);
+    }
+
+    public String parseToJSON(){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("title", this.getTitle());
+            jsonObject.put("editorName", this.getEditorName());
+            jsonObject.put("releaseDate", this.getReleaseDate());
+            jsonObject.put("synopsis", this.getSynopsis());
+            jsonObject.put("bookLanguage", this.getBookLanguage());
+            jsonObject.put("numberOfPages", this.getNumberOfPages());
+            jsonObject.put("author", this.getAuthor());
+            jsonObject.put("bookCover", Base64.encodeToString(this.getBookCover(), Base64.NO_WRAP));
+            return jsonObject.toString();
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+            return "";
+        }
     }
 }
