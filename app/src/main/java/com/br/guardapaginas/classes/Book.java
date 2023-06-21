@@ -390,9 +390,9 @@ public class Book extends DBHandler{
         List<String> response = new ArrayList<String>(3);
         Cursor totalBooks     = getDBConnection().rawQuery("SELECT * FROM " +getTableName() + " WHERE institution = ? AND status = ?", new String[]{getUserInstitution(), ACTIVE});
         response.add(Integer.toString(totalBooks.getCount()));
-        Cursor totalBorrowed  = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ?", new String[]{getUserInstitution(), ACTIVE});
+        Cursor totalBorrowed  = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ?", new String[]{getUserInstitution(), "2"});
         response.add(Integer.toString(totalBorrowed.getCount()));
-        Cursor totalDelayed   = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ? AND expectedDelivery < ?", new String[]{getUserInstitution(), ACTIVE, Functions.getNowDate()});
+        Cursor totalDelayed   = getDBConnection().rawQuery("SELECT * FROM " + getTableName() + " AS b LEFT JOIN bookBorrowings AS bb WHERE b.institution = ? AND bb.status = ?", new String[]{getUserInstitution(), "3"});
         response.add(Integer.toString(totalDelayed.getCount()));
         return response;
     }

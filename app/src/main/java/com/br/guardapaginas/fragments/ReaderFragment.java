@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.br.guardapaginas.HelpPage;
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.classes.User;
@@ -138,6 +139,15 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
                 saveReaderIntent.putExtra("USER_ID", "0");
                 saveReaderIntent.putExtra("USER_TYPE", "READER");
                 startActivityForResult(saveReaderIntent, 1);
+            }
+        });
+
+        ImageView helpBtn = (ImageView) currentView.findViewById(R.id.helpBtn);
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent helpIntent = new Intent(getContext(), HelpPage.class);
+                startActivity(helpIntent);
             }
         });
 

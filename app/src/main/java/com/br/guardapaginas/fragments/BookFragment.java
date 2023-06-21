@@ -20,6 +20,7 @@ import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.br.guardapaginas.HelpPage;
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.R;
 import com.br.guardapaginas.SaveBookView;
@@ -161,6 +162,15 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
             @Override
             public void onClick(View view) {
                 listBooks(false, true, currentPage);
+            }
+        });
+
+        ImageView helpBtn = (ImageView) view.findViewById(R.id.helpBtn);
+        helpBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent helpIntent = new Intent(getContext(), HelpPage.class);
+                startActivity(helpIntent);
             }
         });
 

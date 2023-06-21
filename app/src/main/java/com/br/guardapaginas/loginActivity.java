@@ -64,7 +64,8 @@ public class loginActivity extends AppCompatActivity {
             createAccountBtn.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                    Intent i = new Intent(getApplicationContext(), NewAccount.class);
+                    startActivity(i);
                 }
             });
 

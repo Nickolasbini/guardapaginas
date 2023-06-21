@@ -85,7 +85,7 @@ public class Institution extends DBHandler{
         this.owner = owner;
     }
 
-    public Boolean save(){
+    public Integer save(){
         Institution institution = this;
         ContentValues contentValues = new ContentValues();
         contentValues.put("name", institution.getName());
@@ -102,7 +102,7 @@ public class Institution extends DBHandler{
             contentValues.put("status", this.ACTIVE);
             result = Math.toIntExact(getDBConnection().insert(getTableName(), null, contentValues));
         }
-        return (result > 0 ? true : false);
+        return result;
     }
 
     @SuppressLint("Range")

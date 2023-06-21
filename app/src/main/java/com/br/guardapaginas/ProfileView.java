@@ -113,8 +113,11 @@ public class ProfileView extends AppCompatActivity {
     public Boolean updateProfile(){
         String name     = userNameInput.getText().toString().trim();
         Boolean persist = false;
-        if(!name.equals(userObj.getName()))
+        if(!name.equals(userObj.getName())) {
+            userObj.setName(name);
+            userObj.setUserName(name);
             persist = true;
+        }
         String email = userEmailInput.getText().toString().trim();
         if(!email.equals(userObj.getEmail())){
             if(!isEmailAvaliable(email) || isEmailValid(email)){
@@ -124,7 +127,7 @@ public class ProfileView extends AppCompatActivity {
             persist = true;
         }
         String cpf = userCPFInput.getText().toString().trim();
-        if(!cpf.equals(userObj.getCpf())){
+        if(!cpf.equals(userObj.getCpf()) && !cpf.equals("")){
             if(!Functions.isCPFValid(cpf)){
                 addMessageToToast("CPF inválido");
                 return false;
