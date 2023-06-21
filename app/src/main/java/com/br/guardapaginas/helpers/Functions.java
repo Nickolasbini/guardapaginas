@@ -75,6 +75,23 @@ public class Functions {
         return timeStamp;
     }
 
+    public static Date getNowDateObject() {
+        String nowDataString = Functions.getNowDate();
+        return Functions.parseStringToDateWithFormat(nowDataString, "yyyy-MM-dd");
+    }
+
+    public static Date parseStringToDateWithFormat(String dateString, String format){
+        format = (format == null ? "dd/MM/yyyy" : format);
+        Date dateObj = null;
+        try {
+            dateObj = new SimpleDateFormat(format).parse(dateString);
+            return dateObj;
+        } catch (ParseException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public static String hashMake(String value){
         String generatedPassword = null;
         try{
@@ -104,7 +121,7 @@ public class Functions {
     }
 
     public static Integer parseToInteger(String val){
-        if(val == null)
+        if(val == null || val.equals(""))
             return 0;
         return Integer.parseInt(val);
     }
@@ -121,7 +138,6 @@ public class Functions {
     }
 
     public static String formatDate(String dateString) {
-        System.out.println("A data enviada: "+dateString);
         if (dateString == null)
             return "";
         SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
@@ -252,7 +268,7 @@ public class Functions {
         view.getWindow().setNavigationBarColor(view.getResources().getColor(R.color.primary_color));
         ActionBar actionBar;
         actionBar = view.getSupportActionBar();
-        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#e4b4cc"));
+        ColorDrawable colorDrawable = new ColorDrawable(Color.parseColor("#2797BA"));
         actionBar.setBackgroundDrawable(colorDrawable);
     }
 
@@ -308,5 +324,10 @@ public class Functions {
         Date resultdate = new Date(c.getTimeInMillis());
         response = sdf.format(resultdate);
         return response;
+    }
+
+    public static String getUniqueText(){
+        Long tsLong = System.currentTimeMillis()/1000;
+        return tsLong.toString();
     }
 }

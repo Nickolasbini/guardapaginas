@@ -11,7 +11,6 @@ public class BookGenders extends DBHandler{
 
     public Boolean updateBookGender(String bookId, String[] genderIdsArray){
         clearBookGenders(bookId);
-        System.out.println("gendersId: "+genderIdsArray.length);
         if(genderIdsArray == null)
             return false;
         for(Integer i = 0; i < genderIdsArray.length; i++) {

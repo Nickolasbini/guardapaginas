@@ -18,8 +18,10 @@ import com.br.guardapaginas.BookBorrowingView;
 import com.br.guardapaginas.MainActivity;
 import com.br.guardapaginas.ProfileView;
 import com.br.guardapaginas.R;
+import com.br.guardapaginas.ReportPage;
 import com.br.guardapaginas.SaveBookView;
 import com.br.guardapaginas.classes.Book;
+import com.br.guardapaginas.helpers.MailService;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import org.w3c.dom.Text;
@@ -46,6 +48,7 @@ public class HomeFragment extends Fragment {
     private ImageView openTotalOfBorrowedBookBtn;
     private TextView totalNumberOfDelayedBook;
     private ImageView openTotalOfDelayedBook;
+    private ImageView reportButton;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -97,6 +100,7 @@ public class HomeFragment extends Fragment {
         openTotalOfBorrowedBookBtn = (ImageView) currentView.findViewById(R.id.openTotalOfBorrowedBookBtn);
         totalNumberOfDelayedBook   = (TextView) currentView.findViewById(R.id.totalNumberOfDelayedBook);
         openTotalOfDelayedBook     = (ImageView) currentView.findViewById(R.id.openTotalOfDelayedBook);
+        reportButton               = (ImageView) currentView.findViewById(R.id.reportButton);
         bookObj = new Book(getContext());
         fillBookStatistics();
 
@@ -128,6 +132,14 @@ public class HomeFragment extends Fragment {
             public void onClick(View view) {
                 Intent bookBorrowHome = new Intent(getActivity().getApplicationContext(), BookBorrowingView.class);
                 startActivityForResult(bookBorrowHome, 1);
+            }
+        });
+
+        reportButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent reportPage = new Intent(getActivity().getApplicationContext(), ReportPage.class);
+                startActivityForResult(reportPage, 1);
             }
         });
 

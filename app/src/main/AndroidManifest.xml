@@ -28,6 +28,36 @@
         android:theme="@style/Theme.Guardapaginas"
         tools:targetApi="31">
         <activity
+            android:name=".TheInitialScreen"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".MySplashScreen"
+            android:exported="false"
+            android:label="@string/title_activity_my_splash_screen"
+            android:theme="@style/Theme.Guardapaginas.NoActionBar">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".InstitutionPage"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".ReportPage"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
             android:name=".views.APIListOfBooks"
             android:exported="false">
             <meta-data

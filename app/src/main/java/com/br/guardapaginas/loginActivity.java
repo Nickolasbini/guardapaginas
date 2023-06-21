@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.SyncStateContract;
 import android.view.View;
@@ -14,17 +15,26 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.br.guardapaginas.classes.BookBorrowing;
 import com.br.guardapaginas.classes.DBHandler;
 import com.br.guardapaginas.classes.Gender;
 import com.br.guardapaginas.classes.Institution;
+import com.br.guardapaginas.classes.Notification;
 import com.br.guardapaginas.classes.User;
 import com.br.guardapaginas.helpers.Functions;
+import com.br.guardapaginas.helpers.MailService;
 import com.br.guardapaginas.helpers.SessionManagement;
+import com.br.guardapaginas.views.APIListOfBooks;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 public class loginActivity extends AppCompatActivity {
 
+    Boolean  startActivity    = true;
     EditText loginEmailInput;
     EditText passwordInput;
 
@@ -32,44 +42,60 @@ public class loginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Functions.setSystemColors(this);
 
-        buildBaseData();
+        if(startActivity) {
 
-        loginEmailInput = (EditText) findViewById(R.id.loginEmailInput);
-        passwordInput   = (EditText) findViewById(R.id.passwordInput);
+            Functions.setSystemColors(this);
 
-        Button loginButton = (Button) findViewById(R.id.loginButton);
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                login();
-            }
-        });
+            buildBaseData();
 
-        Button createAccountBtn = (Button) findViewById(R.id.createAccountBtn);
-        createAccountBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            loginEmailInput = (EditText) findViewById(R.id.loginEmailInput);
+            passwordInput = (EditText) findViewById(R.id.passwordInput);
 
-            }
-        });
+            Button loginButton = (Button) findViewById(R.id.loginButton);
+            loginButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    login();
+                }
+            });
 
-        TextView forgotPasswordBtn = (TextView) findViewById(R.id.forgotPasswordBtn);
-        forgotPasswordBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+            Button createAccountBtn = (Button) findViewById(R.id.createAccountBtn);
+            createAccountBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-            }
-        });
+                }
+            });
+
+            TextView forgotPasswordBtn = (TextView) findViewById(R.id.forgotPasswordBtn);
+            forgotPasswordBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
+
+            new loginActivity.EmailTasks().execute();
+        }
     }
 
     @Override
     protected void onStart(){
         super.onStart();
+        Intent thisIntent = getIntent();
+        String flag = thisIntent.getStringExtra("SPLASH_SCREEN_EXECUTED");
+        flag        = (flag == null ? "" : flag);
         SessionManagement sessionManagement = new SessionManagement(this);
-        if(sessionManagement.isSessionActive())
+        if(sessionManagement.isSessionActive()) {
             moveToMainActivity();
+        }else if(flag.equals("")){
+            Intent i = new Intent(getApplicationContext(), TheInitialScreen.class);
+            startActivity(i);
+            startActivity = false;
+        }else{
+            startActivity = true;
+        }
     }
 
     public boolean login(){
@@ -140,6 +166,17 @@ public class loginActivity extends AppCompatActivity {
             obj.setName(defaultGender[i]);
             obj.setDefaultGender(1);
             obj.save();
+        }
+    }
+
+    private class EmailTasks extends AsyncTask<String, Void, String> {
+
+        @Override
+        protected String doInBackground(String... params) {
+            BookBorrowing bookBorrowingObj = new BookBorrowing(getApplicationContext());
+            bookBorrowingObj.fetchAndSendEmailToDelayedBorrowings();
+            bookBorrowingObj.fetchAndSendEmailWarningLicenseAlmostEnding();
+            return null;
         }
     }
 }

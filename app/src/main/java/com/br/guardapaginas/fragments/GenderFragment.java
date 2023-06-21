@@ -93,7 +93,7 @@ public class GenderFragment extends Fragment implements GenderRecycleViewInterfa
 
         getActivity().setTitle("Gêneros");
 
-        searchInput         = currentView.findViewById(R.id.searchInput);
+        searchInput         = currentView.findViewById(R.id.toDate);
         recyclerView        = currentView.findViewById(R.id.listOfBookBorrowings);
         noResultLabel       = currentView.findViewById(R.id.noResultLabel);
 

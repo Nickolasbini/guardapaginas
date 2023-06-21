@@ -92,7 +92,7 @@ public class ReaderFragment extends Fragment implements UserRecycleViewInterface
 
         getActivity().setTitle("Leitores");
 
-        searchInput         = currentView.findViewById(R.id.searchInput);
+        searchInput         = currentView.findViewById(R.id.toDate);
         recyclerView        = currentView.findViewById(R.id.listOfBookBorrowings);
         noResultLabel       = currentView.findViewById(R.id.noResultLabel);
 

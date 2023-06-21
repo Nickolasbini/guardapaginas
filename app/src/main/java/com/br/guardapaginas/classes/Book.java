@@ -259,7 +259,6 @@ public class Book extends DBHandler{
     public Book findById(Integer id){
         Cursor cursor = getDBConnection().rawQuery("SELECT * FROM "+getTableName()+" where id = ?",new String[]{Integer.toString(id)});
         cursor.moveToFirst();
-        System.out.println("Quantidade achada  "+cursor.getCount());
         Book book = new Book(currentContext);
         book.setId(cursor.getInt(cursor.getColumnIndex("id")));
         book.setTitle(cursor.getString(cursor.getColumnIndex("title")));
@@ -300,7 +299,6 @@ public class Book extends DBHandler{
         stringBuilderQuery.append("SELECT g.name AS genderName FROM bookGenders AS bg LEFT JOIN genders AS g ON g.id = bg.gender WHERE bg.book = "+getId());
         Cursor cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), null);
         cursor.moveToFirst();
-        System.out.println("Tamanho cursor: "+cursor.getCount());
         while(!cursor.isAfterLast()){
             String genderName = cursor.getString(cursor.getColumnIndex("genderName"));
             if(cursor.isLast()){
@@ -433,5 +431,25 @@ public class Book extends DBHandler{
             e.printStackTrace();
             return "";
         }
+    }
+
+    public Boolean isAvaliableInStock(){
+        Integer quantity = (this.getQuantity() != null ? Functions.parseToInteger(this.getQuantity()) : 0);
+        if(quantity == 0)
+            return false;
+        return true;
+    }
+
+    public Boolean decreaseQuantityInStock(){
+        Integer quantity = (this.getQuantity() != null ? Functions.parseToInteger(this.getQuantity()) : 0);
+        quantity = (quantity == 0 ? 0 : quantity - 1);
+        this.setQuantity(Functions.parseToString(quantity));
+        return this.save(this);
+    }
+
+    public Boolean increaseQuantityInStock(){
+        Integer quantity = (this.getQuantity() != null ? Functions.parseToInteger(this.getQuantity()) : 0);
+        this.setQuantity(Functions.parseToString(quantity + 1));
+        return this.save(this);
     }
 }

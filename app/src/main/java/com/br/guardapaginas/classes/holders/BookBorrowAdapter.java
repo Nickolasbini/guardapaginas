@@ -45,6 +45,11 @@ public class BookBorrowAdapter extends RecyclerView.Adapter<BookBorrowAdapter.My
         holder.readerEmail.setText(data.get(1));
         holder.bookName.setText(data.get(2));
         holder.borrowDate.setText(data.get(3));
+        holder.retrievalDate.setText(data.get(4));
+        System.out.println("VaLLL: "+data.get(4));
+        Book myBook = bookBorrowItems.get(position).getMyBookObject();
+        if(myBook != null)
+            holder.bookPreview.setImageBitmap(Functions.parseByteArrayToBitMap(myBook.getBookCover()));
     }
 
     @Override
@@ -59,14 +64,17 @@ public class BookBorrowAdapter extends RecyclerView.Adapter<BookBorrowAdapter.My
 
     public static class MyViewHolder extends RecyclerView.ViewHolder{
 
-        TextView readerName, readerEmail, bookName, borrowDate;
+        TextView readerName, readerEmail, bookName, borrowDate, retrievalDate;
+        ImageView bookPreview;
 
         public MyViewHolder(@NonNull View itemView, BookBorrowRecycleViewInterface bookBorrowRecycleViewInterface) {
             super(itemView);
-            readerName  = itemView.findViewById(R.id.readerName);
-            readerEmail = itemView.findViewById(R.id.readerEmail);
-            bookName    = itemView.findViewById(R.id.bookName);
-            borrowDate  = itemView.findViewById(R.id.borrowDate);
+            readerName    = itemView.findViewById(R.id.readerName);
+            readerEmail   = itemView.findViewById(R.id.readerEmail);
+            bookName      = itemView.findViewById(R.id.bookName);
+            borrowDate    = itemView.findViewById(R.id.borrowDate);
+            bookPreview   = itemView.findViewById(R.id.bookPreview);
+            retrievalDate = itemView.findViewById(R.id.retrievalDate);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override

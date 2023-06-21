@@ -106,7 +106,7 @@ public class BookFragment extends Fragment implements BookRecycleViewInterface {
         ArrayAdapter<String> genderSpinnerAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_spinner_dropdown_item, statusOption);
         statusSelect.setAdapter(genderSpinnerAdapter);
 
-        searchInput = (EditText) view.findViewById(R.id.searchInput);
+        searchInput = (EditText) view.findViewById(R.id.toDate);
 
         listParameters.add(true);
         listParameters.add(false);

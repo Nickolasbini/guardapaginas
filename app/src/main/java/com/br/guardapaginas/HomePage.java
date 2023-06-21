@@ -12,11 +12,16 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.br.guardapaginas.classes.Gender;
+import com.br.guardapaginas.classes.Notification;
 import com.br.guardapaginas.databinding.ActivityMainBinding;
 
 import com.br.guardapaginas.helpers.Functions;
 import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.tabs.TabItem;
+
+import java.util.List;
 
 public class HomePage extends AppCompatActivity {
 

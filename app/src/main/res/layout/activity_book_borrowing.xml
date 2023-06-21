@@ -52,14 +52,15 @@
                         android:layout_height="wrap_content">
 
                         <ImageView
-                            android:id="@+id/searchBtn"
+                            android:id="@+id/clearBtn"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="15dp"
-                            android:src="@android:drawable/ic_menu_search"
-                            app:layout_constraintBottom_toBottomOf="@+id/searchInput"
+                            android:src="@android:drawable/ic_menu_close_clear_cancel"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toTopOf="@+id/searchInput" />
+                            app:layout_constraintHorizontal_bias="0.501"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/toDate"
+                            app:srcCompat="@android:drawable/ic_menu_close_clear_cancel" />
 
                         <ImageView
                             android:id="@+id/refreshList"
@@ -74,20 +75,35 @@
                             app:layout_constraintTop_toBottomOf="@+id/statusSpinner" />
 
                         <EditText
-                            android:id="@+id/searchInput"
+                            android:id="@+id/toDate"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="15dp"
-                            android:layout_marginEnd="5dp"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
                             android:ems="10"
-                            android:hint="Título"
+                            android:hint="Data Final"
                             android:inputType="textPersonName"
+                            android:textAlignment="center"
                             android:textColor="#FFFFFF"
                             android:textColorHint="#FFFFFF"
-                            app:layout_constraintEnd_toStartOf="@+id/searchBtn"
+                            app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toBottomOf="@+id/fromDate" />
+
+                        <EditText
+                            android:id="@+id/fromDate"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="15dp"
+                            android:layout_marginEnd="15dp"
+                            android:ems="10"
+                            android:hint="Data Inicial"
+                            android:inputType="textPersonName"
+                            android:textAlignment="center"
+                            android:textColor="#FFFFFF"
+                            android:textColorHint="#FFFFFF"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent" />
 
                         <Spinner
                             android:id="@+id/statusSpinner"
@@ -99,7 +115,7 @@
                             android:textColor="#FFFF"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/searchInput" />
+                            app:layout_constraintTop_toBottomOf="@+id/clearBtn" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </LinearLayout>

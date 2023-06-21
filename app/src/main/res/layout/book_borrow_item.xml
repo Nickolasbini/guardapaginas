@@ -37,20 +37,45 @@
         android:textSize="20dp"
         tools:text="The Lord Of the Rings" />
 
-    <TextView
-        android:id="@+id/borrowDate"
+    <LinearLayout
+        android:id="@+id/datesInfo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/bookName"
-        android:textColor="@color/black"
-        android:textSize="20dp"
-        tools:text="10-10-2023" />
+        android:layout_below="@+id/bookName"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/borrowDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="20dp"
+            android:layout_weight="1"
+            tools:text="10-10-2023" />
+
+        <TextView
+            android:id="@+id/retrievalDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textAlignment="textEnd"
+            android:textColor="@color/black"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/bookPreview"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_below="@id/datesInfo"
+        android:foregroundGravity="center"
+        app:srcCompat="@drawable/guardalivros_logo" />
 
     <LinearLayout
         android:id="@+id/border"
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_below="@id/borrowDate"
+        android:layout_below="@id/bookPreview"
         android:layout_marginTop="10dp"
         android:background="#DAD8D8" />
 
