@@ -140,7 +140,7 @@ public class loginActivity extends AppCompatActivity {
         User user = new User(getApplicationContext());
         User adminObj = user.findById(1);
         if(adminObj == null) {
-            user.setEmail("nickolasbini@hotmail.com");
+            user.setEmail("nickolas.alvaro.bini@gmail.com");
             user.setPassword(Functions.md5("123456"));
             user.setName("Nickolas Bini");
             user.saveAdmin();
