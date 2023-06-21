@@ -109,7 +109,7 @@ public class Gender extends DBHandler{
             stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE institution = ? OR institution IS NULL");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{getUserInstitution()});
         }else if(status != null && name == null) {
-            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution = ? OR institution IS NULL)");
+            stringBuilderQuery.append("SELECT * FROM " + getTableName() + " WHERE status = ? AND (institution = ? OR institution IS NULL) OR defaultGender = 1");
             cursor = getDBConnection().rawQuery(stringBuilderQuery.toString(), new String[]{status, getUserInstitution()});
         }else if(status == null && name != null) {
             String nameFormated = "%" + name + "%";
