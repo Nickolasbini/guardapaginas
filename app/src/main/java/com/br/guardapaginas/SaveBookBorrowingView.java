@@ -326,12 +326,13 @@ public class SaveBookBorrowingView extends AppCompatActivity {
         realDeliveryDateLabel.setVisibility(View.GONE);
         realDeliveryDateInput.setVisibility(View.GONE);
         delayedDaysInput.setText("0 Dias");
+        delayedDaysInput.setText(bookBorrowingObj.calculateDelayedDays() + " dias");
         realDeliveryDateInput.setText(bookBorrowingObj.getRealDelivery());
         if(bookBorrowingObj.getRealDelivery() == null)
             return;
         realDeliveryDateLabel.setVisibility(View.VISIBLE);
         realDeliveryDateInput.setVisibility(View.VISIBLE);
-        delayedDaysInput.setText(bookBorrowingObj.calculateDelayedDays());
+        delayedDaysInput.setText(bookBorrowingObj.calculateDelayedDays() + " dias");
     }
 
     public Boolean fillSpinners(){

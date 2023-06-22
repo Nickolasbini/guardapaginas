@@ -105,7 +105,6 @@ public class Notification extends DBHandler{
         Book bookObj         = bookBorrowingObj.getMyBookObject();
         User readerObj       = bookBorrowingObj.getMyReaderObject();
         Institution instiObj = new Institution(currentContext).findById(Functions.parseToInteger(getUserInstitution()));
-        readerObj.setEmail("nickolasbini@hotmail.com");
         MailService mailer = new MailService("unirank.adm@gmail.com",readerObj.getEmail(),"Notificação do aplicativo Guarda Páginas", "", "");
         String type = null;
         switch (emailType){
